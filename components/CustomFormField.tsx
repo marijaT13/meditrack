@@ -9,6 +9,11 @@ import {
 import { Input } from "./ui/input"
 import { Control } from "react-hook-form"
 import { FormFieldType } from "./forms/PatientForm"
+import Image from "next/image";
+import 'react-phone-number-input/style.css'
+import PhoneInputWithCountrySelect from "react-phone-number-input"
+import { $ZodE164, $ZodE164Def } from "zod/v4/core"
+import { undefined } from "zod"
 
 interface CustomProps{
     control: Control<any>,
@@ -25,12 +30,46 @@ interface CustomProps{
     renderSkeleton?:(field:any) =>React.ReactNode
 }
 const RenderField = ({field, props}:{field:any; props:CustomProps}) => {
-    return(
-        <Input
-        type="text"
-        placeholder="Marija Tashevska"
-        />
-    )
+   const {fieldType, iconSrc, iconAlt, placeholder} = props;
+    switch (fieldType) {
+    case FormFieldType.INPUT:
+        return(
+            <div className="flex rounded-md border border-dark-500 bg-dark-400">
+                {props.iconSrc && (
+                    <Image
+                    src={props.iconSrc}
+                    height={20}
+                    width={20}
+                    alt={iconAlt || 'icon'}
+                    className="ml-2"
+                    />
+                )}
+                <FormControl>
+                    <Input
+                    placeholder={placeholder}
+                    {...field}
+                    className="shad-input border-0"
+                    />
+                </FormControl>
+            </div>
+        )
+    case FormFieldType.PHONE_INPUT:
+        return(
+            <FormControl>
+                <PhoneInputWithCountrySelect
+                defaultCountry="MK"
+                onChange={field.onChange } 
+                placeholder={placeholder}
+                international
+                withCountryCallingCode
+                value={field.value}
+                className="input-phone"
+                />
+            </FormControl>
+        )
+    default:
+        break;
+   }
 }
 const CustomFormField = (props: CustomProps) => {
     const {control, fieldType, name, label} = props;
