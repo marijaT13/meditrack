@@ -9,7 +9,7 @@ export default function Home() {
       <section className="remove-scrollbar container my-auto">
         <div className="sub-container max-w-[496px]">
           <Image 
-            src="/assets/icons/logo-full.svg"
+            src="/assets/icons/logo-full2.svg"
             height={900}
             width={900}
             alt="MediCall logo"
