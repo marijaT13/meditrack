@@ -14,6 +14,8 @@ const fontSans = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   title: "MediCall",
   description: "A healthcare managment system",
+
+  
 };
 
 export default function RootLayout({
@@ -23,6 +25,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head><link rel="icon" href="/assets/icons/logo-icon.svg" /></head>
+        
       <body 
       className={
         cn('min-h-screen bg-dark-300 font-sans antialiased', 
