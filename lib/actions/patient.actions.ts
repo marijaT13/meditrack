@@ -1,8 +1,10 @@
+"use server"
 import { ID, Query } from "node-appwrite"
 import { users } from "../appwrite.config"
 
 type CreateUserParams = {
     email: string;
+    password?: string;
     phone: string;
     name: string;
 };
@@ -18,10 +20,11 @@ export const createUser = async(user:CreateUserParams) => {
         return newUser;
     } catch(error:any){
         if(error && error?.code ===409){
-            const existingUser = await users.list([
-                Query.equal('email', user.email)
+               const existingUser = await users.list([
+                Query.equal('email', [user.email])
             ])
-            return existingUser?.users[0];
-        }
+
+            return existingUser.users[0]
+    }
     }   
 }
