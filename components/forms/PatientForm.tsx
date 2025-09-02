@@ -8,9 +8,10 @@ import CustomFormField from "../CustomFormField"
 import SubmitButton from "../ui/SubmitButton"
 import { useState } from "react"
 import { UserFormValidation } from "@/lib/validation"
-import { create } from "domain"
+
 import { useRouter } from "next/navigation"
 import { createUser } from "@/lib/actions/patient.actions"
+import { create } from "node:domain"
 
 export enum FormFieldType{
     INPUT='input',

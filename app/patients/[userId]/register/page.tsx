@@ -12,6 +12,7 @@ type SearchParamProps = {
 
 const Register = async ({params:{userId}}:SearchParamProps) => {
     const user = await getUser(userId);
+  console.log("Fetched user:", user);
     return (
         <div className="flex h-screen max-h-screen">
       <section className="remove-scrollbar container">
@@ -24,7 +25,7 @@ const Register = async ({params:{userId}}:SearchParamProps) => {
             className="mb-12 h-12 w-fit"
           />
 
-          <RegisterForm user={user} />
+          <RegisterForm user={user?.user} />
             
             <p className="copyright py-12">
               ©2025 MediCall
@@ -41,4 +42,4 @@ const Register = async ({params:{userId}}:SearchParamProps) => {
     </div>
     );
 }
-export default Register
+export default Register;

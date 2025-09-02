@@ -1,14 +1,15 @@
 import { Gender } from "@/types/appwrite.types";
 
-export const GenderOptions = ["Female", "Male", "Other"];
+export const GenderOptions = ["male", "female", "other"];
 
 export const PatientFormDefaultValues = {
-  firstName: "",
-  lastName: "",
+  userId: "",
+  name: "",
   email: "",
   phone: "",
+  password: "",
   birthDate: new Date(Date.now()),
-  gender: "Fenale" as Gender,
+  gender: "Female" as Gender,
   address: "",
   occupation: "",
   emergencyContactName: "",

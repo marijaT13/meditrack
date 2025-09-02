@@ -1,30 +1,37 @@
-export const GenderOptions = ["Female", "Male", "Other"];
+declare type Gender = "male" | "female" | "other";
 
-export const PatientFormDefaultValues = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  phone: "",
-  birthDate: new Date(Date.now()),
-  gender: "Female" as Gender,
-  address: "",
-  occupation: "",
-  emergencyContactName: "",
-  emergencyContactNumber: "",
-  primaryPhysician: "",
-  insuranceProvider: "",
-  insurancePolicyNumber: "",
-  allergies: "",
-  currentMedication: "",
-  familyMedicalHistory: "",
-  pastMedicalHistory: "",
-  identificationType: "Birth Certificate",
-  identificationNumber: "",
-  identificationDocument: [],
-  treatmentConsent: false,
-  disclosureConsent: false,
-  privacyConsent: false,
-};
+declare interface User extends CreateUserParams {
+  $id: string;
+}
+declare interface CreateUserParams {
+  name: string;
+  email: string;
+  phone: string;
+}
+declare interface RegisterUserParams extends CreateUserParams {
+  userId: string;
+  name: string;
+  email: string;
+  phone: string;
+  password: string;
+  birthDate: Date;
+  gender: Gender;
+  address: string;
+  occupation: string;
+  emergencyContactName: string;
+  emergencyContactNumber: string;
+  primaryPhysician: string;
+  insuranceProvider: string;
+  insurancePolicyNumber: string;
+  allergies: string | undefined;
+  currentMedication: string | undefined;
+  familyMedicalHistory: string | undefined;
+  pastMedicalHistory: string | undefined;
+  identificationType: string | undefined;
+  identificationNumber: string | undefined;
+  identificationDocument: FormData | undefined;
+  privacyConsent: boolean;
+}
 
 export const IdentificationTypes = [
   "Birth Certificate",
