@@ -1,6 +1,5 @@
 import { Button } from "./button";
 import Image from "next/image";
-Button
 interface ButtonProps{
     isLoading: boolean,
     className?: string,

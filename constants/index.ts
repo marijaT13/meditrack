@@ -1,6 +1,6 @@
 import { Gender } from "@/types/appwrite.types";
 
-export const GenderOptions = ["male", "female", "other"];
+export const GenderOptions = ["Male", "Female", "Other"];
 
 export const PatientFormDefaultValues = {
   userId: "",

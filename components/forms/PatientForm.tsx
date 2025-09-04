@@ -1,6 +1,6 @@
 "use client"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { SubmitHandler, useForm } from "react-hook-form"
 import { z } from "zod"
 import { Button } from "@/components/ui/button"
 import { Form } from "@/components/ui/form"
@@ -22,6 +22,7 @@ export enum FormFieldType{
     SELECT='select',
     SKELETON='skeleton',
 }
+type UserFormValues = z.infer<typeof UserFormValidation>;
 
 const PatientForm = () => {
     const router = useRouter();
@@ -35,7 +36,7 @@ const PatientForm = () => {
             },
         });
 
- async function onSubmit(values: z.infer<typeof UserFormValidation>) { 
+    const onSubmit: SubmitHandler<UserFormValues> = async (values) => {
      setIsLoading(true);
     try {
          const userData = {
@@ -44,8 +45,8 @@ const PatientForm = () => {
             phone: values.phone,
         };
         const newUser = await createUser(userData);
-        if(newUser) router.push('/patients/${newUser.$id}/register')
-    } catch (error) {
+    if (newUser) router.push(`/patients/${newUser.$id}/register`);
+        } catch (error) {
         console.log(error);
     }
      setIsLoading(false);
