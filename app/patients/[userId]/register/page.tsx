@@ -3,12 +3,14 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import { getPatient, getUser } from '@/lib/actions/patient.actions';
-import { SearchParamProps } from '@/types';
 import { redirect } from 'next/navigation';
+import { SearchParamProps } from '@/types';
 
 
-const Register = async ({ params}: SearchParamProps) => {
-  const { userId } = params;
+const Register = async ({ params }: SearchParamProps) => {
+    const { userId } = params;
+      console.log("Params:", params);  // should show { userId: "..." }
+  console.log("UserId:", userId); 
   const user = await getUser(userId);
   const patient = await getPatient(userId);
 

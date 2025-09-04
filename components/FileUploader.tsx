@@ -8,7 +8,7 @@ type FileUploaderProps ={
     files:File[] | undefined,
     onChange:(files:File[]) => void
 }
-export const FileUploader = ({ files, onChange }: FileUploaderProps) => {
+const FileUploader = ({ files, onChange }: FileUploaderProps) => {
   const onDrop = useCallback((acceptedFiles: File[]) => {
     onChange(acceptedFiles);
   }, []);
@@ -48,3 +48,4 @@ export const FileUploader = ({ files, onChange }: FileUploaderProps) => {
     </div>
   );
 };
+export default FileUploader;
