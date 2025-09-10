@@ -1,6 +1,5 @@
 import { Models } from "node-appwrite";
 
-export type Gender = "Male" | "Female" | "Other";
 export interface Patient extends Models.Document {
   userId: string;
   name: string;
@@ -24,7 +23,6 @@ export interface Patient extends Models.Document {
   identificationDocument: FormData | undefined;
   privacyConsent: boolean;
 }
-export type Status = "scheduled" | "completed" | "cancelled" | "pending";
 
 export interface Appointment extends Models.Document {
   patient: Patient;

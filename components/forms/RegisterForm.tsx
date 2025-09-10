@@ -22,12 +22,11 @@ import { PatientFormValidation } from "@/lib/validation";
 
 import "react-datepicker/dist/react-datepicker.css";
 import "react-phone-number-input/style.css";
-import { FormFieldType } from "./PatientForm";
 import CustomFormField from "../CustomFormField";
-import SubmitButton from "../ui/SubmitButton";
 import FileUploader from "../FileUploader";
-import { Birthstone } from "next/font/google";
-import { User } from "@/types";
+import SubmitButton from "../ui/SubmitButton";
+import { FormFieldType } from "./PatientForm";
+
 
 const RegisterForm = ({ user }: { user: User }) => {
   const router = useRouter();
@@ -35,16 +34,17 @@ const RegisterForm = ({ user }: { user: User }) => {
 
   const form = useForm<z.infer<typeof PatientFormValidation>>({
     resolver: zodResolver(PatientFormValidation),
-    defaultValues: {                          
+    defaultValues: {
       ...PatientFormDefaultValues,
-      name:"",
-      email:"",
-      phone:"",
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
     },
   });
 
   const onSubmit = async (values: z.infer<typeof PatientFormValidation>) => {
     setIsLoading(true);
+
     // Store file info in form data as
     let formData;
     if (
@@ -61,16 +61,35 @@ const RegisterForm = ({ user }: { user: User }) => {
     }
 
     try {
-      const patientData = {
-        ...values,
+      const patient = {
         userId: user.$id,
-      birthDate: new Date(values.birthDate),
-      identificationDocument: formData, 
-      }
-      //@ts-ignore
-      const patient = await registerPatient(patientData);
+        name: values.name,
+        email: values.email,
+        phone: values.phone,
+        birthDate: new Date(values.birthDate),
+        gender: values.gender,
+        address: values.address,
+        occupation: values.occupation,
+        emergencyContactName: values.emergencyContactName,
+        emergencyContactNumber: values.emergencyContactNumber,
+        primaryPhysician: values.primaryPhysician,
+        insuranceProvider: values.insuranceProvider,
+        insurancePolicyNumber: values.insurancePolicyNumber,
+        allergies: values.allergies,
+        currentMedication: values.currentMedication,
+        familyMedicalHistory: values.familyMedicalHistory,
+        pastMedicalHistory: values.pastMedicalHistory,
+        identificationType: values.identificationType,
+        identificationNumber: values.identificationNumber,
+        identificationDocument: values.identificationDocument
+          ? formData
+          : undefined,
+        privacyConsent: values.privacyConsent,
+      };
 
-      if (patient) {
+      const newPatient = await registerPatient(patient);
+
+      if (newPatient) {
         router.push(`/patients/${user.$id}/new-appointment`);
       }
     } catch (error) {
@@ -80,24 +99,14 @@ const RegisterForm = ({ user }: { user: User }) => {
     setIsLoading(false);
   };
 
-  return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="flex-1 space-y-12"
-      >
-        <section className="space-y-4">
-          <h1 className="header">Welcome 👋</h1>
-          <p className="text-dark-700">Let us know more about yourself.</p>
-        </section>
+    return(
+       <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 flex-1">
+       <section className="mb-12 space-y-4">
+        <h1 className="header">Hello there ✨</h1>
+        <p className="text-dark-700">Shedule your first appointment.</p>
 
-        <section className="space-y-6">
-          <div className="mb-9 space-y-1">
-            <h2 className="sub-header">Personal Information</h2>
-          </div>
-
-          {/* NAME */}
-
+        {/* NAME */}
           <CustomFormField
             fieldType={FormFieldType.INPUT}
             control={form.control}
@@ -124,7 +133,7 @@ const RegisterForm = ({ user }: { user: User }) => {
               control={form.control}
               name="phone"
               label="Phone Number"
-              placeholder="+(389)70/123-456"
+              placeholder="(+389) 70 456 356"
             />
           </div>
 
@@ -170,7 +179,7 @@ const RegisterForm = ({ user }: { user: User }) => {
               control={form.control}
               name="address"
               label="Address"
-              placeholder="ul.Partizanska bb, Bitola"
+              placeholder="ul. Partizanska bb, Bitola"
             />
 
             <CustomFormField
@@ -197,7 +206,7 @@ const RegisterForm = ({ user }: { user: User }) => {
               control={form.control}
               name="emergencyContactNumber"
               label="Emergency contact number"
-              placeholder="+(389)70/123-456"
+              placeholder="(+389) 70 456 356"
             />
           </div>
         </section>
@@ -238,7 +247,7 @@ const RegisterForm = ({ user }: { user: User }) => {
               control={form.control}
               name="insuranceProvider"
               label="Insurance provider"
-              placeholder="Kroacija Osiguruvanje"
+              placeholder="BlueCross BlueShield"
             />
 
             <CustomFormField
@@ -358,10 +367,9 @@ const RegisterForm = ({ user }: { user: User }) => {
           />
         </section>
 
-        <SubmitButton isLoading={isLoading}>Submit and Continue</SubmitButton>
+        <SubmitButton isLoading={isLoading}> Get Started</SubmitButton>               
       </form>
     </Form>
-  );
+    );      
 };
-
-export default RegisterForm;
+export default RegisterForm

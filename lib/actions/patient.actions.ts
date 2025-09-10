@@ -1,22 +1,20 @@
 "use server";
 
 import { ID, Query } from "node-appwrite";
- import { InputFile } from 'node-appwrite/file';
+import { InputFile } from 'node-appwrite/file';
+
 import {
-    API_KEY,
+    NEXT_PUBLIC_APPWRITE_PROJECT_ID,
     DATABASE_ID,
     PATIENT_TABLE_ID,
-    APPOINTMENT_TABLE_ID,
-    DOCTOR_TABLE_ID,
     NEXT_PUBLIC_BUCKET_ID,
     NEXT_PUBLIC_APPWRITE_ENDPOINT,
   databases,
   storage,
   users,
-  NEXT_PUBLIC_APPWRITE_PROJECT_ID,
 } from "../appwrite.config";
 import { parseStringify } from "../utils";
-import { CreateUserParams, RegisterUserParams } from "@/types";
+
 // CREATE APPWRITE USER
 export const createUser = async (user: CreateUserParams) => {
   try {
@@ -72,16 +70,18 @@ export const registerPatient = async ({
 
       file = await storage.createFile(NEXT_PUBLIC_BUCKET_ID!, ID.unique(), inputFile);
     }
-    console.log({userId: patient.userId})
+
     // Create new patient document -> https://appwrite.io/docs/references/cloud/server-nodejs/databases#createDocument
     const newPatient = await databases.createDocument(
       DATABASE_ID!,
       PATIENT_TABLE_ID!,
       ID.unique(),
       {
-        identificationDocumentId: file?.$id || null,
-        identificationDocumentUrl:`${NEXT_PUBLIC_APPWRITE_ENDPOINT}/storage/buckets/${NEXT_PUBLIC_BUCKET_ID}/files/${file?.$id}/view??project=${NEXT_PUBLIC_APPWRITE_PROJECT_ID}`,
-        ...patient
+        identificationDocumentId: file?.$id ? file.$id : null,
+        identificationDocumentUrl: file?.$id
+          ? `${NEXT_PUBLIC_APPWRITE_ENDPOINT}/storage/buckets/${NEXT_PUBLIC_BUCKET_ID}/files/${file.$id}/view??project=${NEXT_PUBLIC_APPWRITE_PROJECT_ID}`
+          : null,
+        ...patient,
       }
     );
 
@@ -97,7 +97,7 @@ export const getPatient = async (userId: string) => {
     const patients = await databases.listDocuments(
       DATABASE_ID!,
       PATIENT_TABLE_ID!,
-      [Query.equal("userId", userId)]
+      [Query.equal("userId", [userId])]
     );
 
     return parseStringify(patients.documents[0]);
