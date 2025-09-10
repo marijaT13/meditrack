@@ -1,9 +1,8 @@
 
-declare type SearchParamProps = {
-    params: { [key: string]: string };
-    searchParams: { [key: string]: string | string[] | undefined };
-  };
-  
+type SearchParamProps<T extends string = string> = {
+  params: Record<T, string>; // dynamic route params
+  searchParams: { [key: string]: string | string[] | undefined }; // query string (?key=value)
+};
   declare type Gender = "Male" | "Female" | "Other";
   declare type Status = "pending" | "scheduled" | "cancelled";
   

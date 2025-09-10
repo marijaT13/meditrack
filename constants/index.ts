@@ -1,4 +1,3 @@
-import { Gender } from "@/types/appwrite.types";
 
 export const GenderOptions = ["Male", "Female", "Other"];
 

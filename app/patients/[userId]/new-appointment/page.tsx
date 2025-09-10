@@ -5,9 +5,15 @@ import { SearchParamProps } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 
-export default async function NewAppointment({params: {userId}}: SearchParamProps) {
+export default async function NewAppointment(props: SearchParamProps) {
+  const params = await props.params;
+
+  const {
+    userId
+  } = params;
+
   const patient = await getPatient(userId);
-  
+
   return (
     <div className="flex h-screen max-h-screen">
     

@@ -1,24 +1,52 @@
 "use server";
 
 import { ID, Query } from "node-appwrite";
-import { InputFile } from 'node-appwrite/file';
+import { InputFile } from "node-appwrite/file";
 
 import {
-    NEXT_PUBLIC_APPWRITE_PROJECT_ID,
-    DATABASE_ID,
-    PATIENT_TABLE_ID,
-    NEXT_PUBLIC_BUCKET_ID,
-    NEXT_PUBLIC_APPWRITE_ENDPOINT,
+  NEXT_PUBLIC_APPWRITE_PROJECT_ID,
+  DATABASE_ID,
+  PATIENT_TABLE_ID,
+  NEXT_PUBLIC_BUCKET_ID,
+  NEXT_PUBLIC_APPWRITE_ENDPOINT,
   databases,
   storage,
   users,
 } from "../appwrite.config";
+
 import { parseStringify } from "../utils";
 
-// CREATE APPWRITE USER
+// ------------------ TYPES ------------------
+export type CreateUserParams = {
+  name: string;
+  email: string;
+  phone: string;
+};
+
+export type RegisterUserParams = {
+  userId: string;
+  birthDate: Date;
+  gender: string;
+  address?: string;
+  occupation?: string;
+  emergencyContactName?: string;
+  emergencyContactNumber?: string;
+  primaryPhysician?: string;
+  insuranceProvider?: string;
+  insurancePolicyNumber?: string;
+  allergies?: string;
+  currentMedication?: string;
+  familyMedicalHistory?: string;
+  pastMedicalHistory?: string;
+  identificationType?: string;
+  identificationNumber?: string;
+  identificationDocument?: FormData;
+  privacyConsent?: boolean;
+};
+
+// ------------------ CREATE USER ------------------
 export const createUser = async (user: CreateUserParams) => {
   try {
-    // Create new user -> https://appwrite.io/docs/references/1.5.x/server-nodejs/users#create
     const newUser = await users.create(
       ID.unique(),
       user.email,
@@ -29,33 +57,25 @@ export const createUser = async (user: CreateUserParams) => {
 
     return parseStringify(newUser);
   } catch (error: any) {
-    // Check existing user
-    if (error && error?.code === 409) {
-      const existingUser = await users.list([
-        Query.equal("email", [user.email]),
-      ]);
-
+    if (error?.code === 409) {
+      const existingUser = await users.list([Query.equal("email", [user.email])]);
       return existingUser.users[0];
     }
-    console.error("An error occurred while creating a new user:", error);
+    console.error("Error creating user:", error);
   }
 };
 
-// GET USER
+// ------------------ GET USER ------------------
 export const getUser = async (userId: string) => {
   try {
     const user = await users.get(userId);
-
     return parseStringify(user);
   } catch (error) {
-    console.error(
-      "An error occurred while retrieving the user details:",
-      error
-    );
+    console.error("Error retrieving user:", error);
   }
 };
 
-// REGISTER PATIENT
+// ------------------ REGISTER PATIENT ------------------
 export const registerPatient = async ({
   identificationDocument,
   ...patient
@@ -64,34 +84,32 @@ export const registerPatient = async ({
     let file;
     if (identificationDocument) {
       const inputFile = InputFile.fromBuffer(
-                identificationDocument?.get('blobFile') as Blob,
-                identificationDocument?.get('fileName') as string
-        );
-
+        identificationDocument.get("blobFile") as Blob,
+        identificationDocument.get("fileName") as string
+      );
       file = await storage.createFile(NEXT_PUBLIC_BUCKET_ID!, ID.unique(), inputFile);
     }
 
-    // Create new patient document -> https://appwrite.io/docs/references/cloud/server-nodejs/databases#createDocument
     const newPatient = await databases.createDocument(
       DATABASE_ID!,
       PATIENT_TABLE_ID!,
       ID.unique(),
       {
-        identificationDocumentId: file?.$id ? file.$id : null,
-        identificationDocumentUrl: file?.$id
-          ? `${NEXT_PUBLIC_APPWRITE_ENDPOINT}/storage/buckets/${NEXT_PUBLIC_BUCKET_ID}/files/${file.$id}/view??project=${NEXT_PUBLIC_APPWRITE_PROJECT_ID}`
-          : null,
         ...patient,
+        identificationDocumentId: file?.$id || null,
+        identificationDocumentUrl: file?.$id
+          ? `${NEXT_PUBLIC_APPWRITE_ENDPOINT}/storage/buckets/${NEXT_PUBLIC_BUCKET_ID}/files/${file.$id}/view?project=${NEXT_PUBLIC_APPWRITE_PROJECT_ID}`
+          : null,
       }
     );
 
     return parseStringify(newPatient);
   } catch (error) {
-    console.error("An error occurred while creating a new patient:", error);
+    console.error("Error registering patient:", error);
   }
 };
 
-// GET PATIENT
+// ------------------ GET PATIENT ------------------
 export const getPatient = async (userId: string) => {
   try {
     const patients = await databases.listDocuments(
@@ -102,9 +120,6 @@ export const getPatient = async (userId: string) => {
 
     return parseStringify(patients.documents[0]);
   } catch (error) {
-    console.error(
-      "An error occurred while retrieving the patient details:",
-      error
-    );
+    console.error("Error retrieving patient:", error);
   }
 };
