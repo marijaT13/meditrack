@@ -1,5 +1,5 @@
 'use client'
-import { MouseEvent, useState } from 'react'
+import { MouseEvent, useEffect, useState } from 'react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,16 +19,31 @@ import {
 } from "@/components/ui/input-otp"
 
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { decryptKey, encryptKey } from '@/lib/utils';
+import { Fira_Sans_Extra_Condensed } from 'next/font/google';
 
 
 const PasskeyModal = () => {
     const router = useRouter();
+    const path = usePathname();
     const [open, setOpen ] = useState(true);
     const [passkey, setPasskey] = useState('');
     const [error, setError] = useState('');
-       
+    const encryptedKey = typeof window !== 'undefined' ? window.localStorage.getItem('accessKey'):null;
 
+    useEffect(() => {
+        const accessKey = encryptedKey && decryptKey (encryptedKey);
+        if (path) {
+            if(accessKey === process.env.NEXT_PUBLIC_ADMIN_PASSKEY){
+            setOpen(false);
+            router.push('/admin')
+            }else{
+                setOpen(true);
+            }
+        } 
+
+    }, [encryptedKey])
     const closeModal=()=> {
         setOpen(false);
         router.push('/')
@@ -41,6 +56,7 @@ const PasskeyModal = () => {
         if(passkey === process.env.NEXT_PUBLIC_ADMIN_PASSKEY){
             const encryptedKey=encryptKey(passkey);
             localStorage.setItem('accessKey', encryptedKey);
+            setOpen(false);
         }else{
             setError('Invalid passkey. Please try again.')
         }
