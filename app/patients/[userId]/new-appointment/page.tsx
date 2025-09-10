@@ -1,11 +1,16 @@
 import AppointmentForm from "@/components/forms/AppointmentForm";
+import PatientForm from "@/components/forms/PatientForm";
+import { getPatient } from "@/lib/actions/patient.actions";
 import { SearchParamProps } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function NewAppointment({params: {userId}}: SearchParamProps) {
+export default async function NewAppointment({params: {userId}}: SearchParamProps) {
+  const patient = await getPatient(userId);
+  
   return (
     <div className="flex h-screen max-h-screen">
+    
       <section className="remove-scrollbar container my-auto">
         <div className="sub-container max-w-[860px] flex-1 justify-between">
           <Image 
@@ -15,15 +20,16 @@ export default function NewAppointment({params: {userId}}: SearchParamProps) {
             alt="MediCall logo"
             className="mb-12 h-12 w-fit"
           />
-          <AppointmentForm 
-         userId={userId} 
-         type="create"
-          //patientId={patient?.$id}
-          />
+            <AppointmentForm
+            type="create"
+            userId={userId}
+            // patientId={patient.$id}
+            />
+          
             <p className="copyright mt-10 py-12">
               ©2025 MediCall
             </p>
-            
+          
         </div>
       </section>
       <Image 

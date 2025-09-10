@@ -1,11 +1,18 @@
 import PatientForm from "@/components/forms/PatientForm";
+import PasskeyModal from "@/components/PasskeyModal";
+import { SearchParamProps } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function Home() {
+export default function Home({searchParams}: SearchParamProps) {
+  const isAdmin = searchParams.admin === 'true';
+  //OTP VERIFICATION
+
   return (
     <div className="flex h-screen max-h-screen">
-      {/**OTP verification aka passkeymodal */}
+
+      {isAdmin && <PasskeyModal/>}
+      
       <section className="remove-scrollbar container my-auto">
         <div className="sub-container max-w-[496px]">
           <Image 
@@ -19,7 +26,7 @@ export default function Home() {
           <PatientForm />
 
           <div className="text-14-regular m-20 flex justify-between">
-            <p className="justify-items-end text-dark-600 xl:text-left">
+            <p className="copyright">
               ©2025 MediCall
             </p>
             <Link href="/?admin=true" className="text-green-500">
