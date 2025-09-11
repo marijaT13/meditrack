@@ -29,13 +29,13 @@ export const columns: ColumnDef<Payment>[] = [
   {
     accessorKey:'patient',
     header:'Patient',
-    cell:({row})=> <p className="text-14-medium">{row.original.patient.name}</p>
+    //cell:({row})=> <p className="text-14-medium">{row.original.patient.name}</p>
   },
   {
     accessorKey: "status",
     header: "Status",
     cell:({row}) => <div className="min-w-[115px]">
-        <StatusBadge status= {appointment.status}/>
+       {/* <StatusBadge status= {appointment.status}/> */}
     </div>
   },
   {
