@@ -56,7 +56,7 @@ export const PatientFormValidation = z.object({
   identificationType: z.string().optional(),
   identificationNumber: z.string().optional(),
   identificationDocument: z.custom<File[]>().optional(),
-  reatmentConsent: z.boolean(),
+  treatmentConsent: z.boolean(),
   disclosureConsent: z.boolean(),
   privacyConsent: z.boolean(),
 });

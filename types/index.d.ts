@@ -44,6 +44,7 @@ type SearchParamProps<T extends string = string> = {
     schedule: Date;
     status: Status;
     note: string | undefined;
+    
   };
   
   declare type UpdateAppointmentParams = {

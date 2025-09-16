@@ -1,11 +1,8 @@
 import AppointmentForm from "@/components/forms/AppointmentForm";
-import PatientForm from "@/components/forms/PatientForm";
 import { getPatient } from "@/lib/actions/patient.actions";
-import { SearchParamProps } from "@/types";
 import Image from "next/image";
-import Link from "next/link";
-
-export default async function NewAppointment(props: SearchParamProps) {
+ 
+export default async function Appointment(props: SearchParamProps) {
   const params = await props.params;
 
   const {
@@ -28,8 +25,8 @@ export default async function NewAppointment(props: SearchParamProps) {
           />
             <AppointmentForm
             type="create"
-            userId={userId}
-            // patientId={patient.$id}
+            userId={userId} 
+            patientId={patient?.$id}   
             />
           
             <p className="copyright mt-10 py-12">

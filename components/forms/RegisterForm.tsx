@@ -33,14 +33,25 @@ const RegisterForm = ({ user }: { user: any }) => {
 
   const form = useForm({
     resolver: zodResolver(PatientFormValidation),
-    defaultValues: { name: user.name, email: user.email, phone: user.phone },
+    defaultValues: { 
+      name: user.name, 
+      email: user.email, 
+      phone: user.phone,
+      treatmentConsent: false,
+    disclosureConsent: false,
+    privacyConsent: false,},
   });
 
   const onSubmit = async (values: any) => {
     setIsLoading(true);
+    console.log(
+      "Submitting form with values:", values
+    );
     try {
       const newPatient = await registerPatient({ ...values, userId: user.$id });
-      if (newPatient) router.push(`/patients/${user.$id}/new-appointment`);
+      if (!newPatient) throw new Error("Patient registration failed");
+      
+      router.push(`/patients/${user.$id}/new-appointment`);
     } catch (error) {
       console.error(error);
     }

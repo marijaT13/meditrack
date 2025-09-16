@@ -1,4 +1,3 @@
-// app/patients/[userId]/register/page.tsx
 import Image from "next/image";
 import { redirect } from "next/navigation";
 
@@ -10,25 +9,21 @@ type SearchParamProps = {
 };
 
 const RegisterPage = async ({ params }: SearchParamProps) => {
-  const { userId } = params;
+  const userId = params.userId;
 
   // Validate userId length to avoid Appwrite errors
   if (!userId || userId.length > 36) {
-    redirect("/"); // or show an error page
+    redirect("/"); 
   }
 
   // Fetch user and patient in parallel
   const [user, patient] = await Promise.all([getUser(userId), getPatient(userId)]);
 
-  // If user doesn't exist, redirect to initial form or error
-  if (!user) {
-    redirect("/patients"); // or show error
-  }
+  // If user doesn't exist → redirect
+  if (!user) redirect("/patients");
 
-  // If patient already exists, redirect to their appointment page
-  if (patient) {
-    redirect(`/patients/${userId}/new-appointment`);
-  }
+  // If patient already exists → redirect to new appointment
+  if (patient) redirect(`/patients/${userId}/new-appointment`);
 
   return (
     <div className="flex h-screen max-h-screen">
@@ -42,6 +37,7 @@ const RegisterPage = async ({ params }: SearchParamProps) => {
             className="mb-12 h-10 w-fit"
           />
 
+          {/* Pass user object to the form */}
           <RegisterForm user={user} />
 
           <p className="copyright py-12">© 2025 MediCall</p>

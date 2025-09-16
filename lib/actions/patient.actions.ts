@@ -78,14 +78,31 @@ export const getUser = async (userId: string) => {
 // ------------------ REGISTER PATIENT ------------------
 export const registerPatient = async ({
   identificationDocument,
+  userId,
+  gender, 
   ...patient
-}: RegisterUserParams) => {
+}: any & { userId: string }) => {
   try {
+    const normalizedGender = (() => {
+      switch (gender?.toLowerCase()) {
+        case "male":
+          return "male";
+        case "female":
+          return "female";
+        case "others":
+        case "other":
+          return "others";
+        default:
+          return null;
+      }
+    })();
+
+    if (!normalizedGender) throw new Error("Invalid gender value");
     let file;
     if (identificationDocument) {
       const inputFile = InputFile.fromBuffer(
-        identificationDocument.get("blobFile") as Blob,
-        identificationDocument.get("fileName") as string
+        identificationDocument,
+        identificationDocument.name
       );
       file = await storage.createFile(NEXT_PUBLIC_BUCKET_ID!, ID.unique(), inputFile);
     }
@@ -96,6 +113,9 @@ export const registerPatient = async ({
       ID.unique(),
       {
         ...patient,
+        userId,
+        gender: normalizedGender,
+        password: "someDefaultOrGeneratedPassword123!",
         identificationDocumentId: file?.$id || null,
         identificationDocumentUrl: file?.$id
           ? `${NEXT_PUBLIC_APPWRITE_ENDPOINT}/storage/buckets/${NEXT_PUBLIC_BUCKET_ID}/files/${file.$id}/view?project=${NEXT_PUBLIC_APPWRITE_PROJECT_ID}`
@@ -106,6 +126,7 @@ export const registerPatient = async ({
     return parseStringify(newPatient);
   } catch (error) {
     console.error("Error registering patient:", error);
+    throw error; // better to throw so the form can catch
   }
 };
 
@@ -115,7 +136,7 @@ export const getPatient = async (userId: string) => {
     const patients = await databases.listDocuments(
       DATABASE_ID!,
       PATIENT_TABLE_ID!,
-      [Query.equal("userId", [userId])]
+      [Query.equal("userId", userId)]
     );
 
     return parseStringify(patients.documents[0]);
