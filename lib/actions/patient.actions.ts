@@ -24,6 +24,10 @@ export type CreateUserParams = {
 };
 
 export type RegisterUserParams = {
+  email: string;
+  password: string;
+  phone: string;
+  name: string;
   userId: string;
   birthDate: Date;
   gender: string;
@@ -42,6 +46,9 @@ export type RegisterUserParams = {
   identificationNumber?: string;
   identificationDocument?: FormData;
   privacyConsent?: boolean;
+  treatmentConsent?: boolean;
+  disclosureConsent?: boolean;
+
 };
 
 // ------------------ CREATE USER ------------------
@@ -112,11 +119,30 @@ export const registerPatient = async ({
       PATIENT_TABLE_ID!,
       ID.unique(),
       {
-        ...patient,
-        userId,
-        gender: normalizedGender,
-        password: "someDefaultOrGeneratedPassword123!",
-        identificationDocumentId: file?.$id || null,
+       email: patient.email,
+    password: "someDefaultOrGeneratedPassword123!", // Or patient.password if real one
+    name: patient.name,
+    userId,
+    gender: normalizedGender,
+        phone: patient.phone,
+
+    birthDate: patient.birthDate, 
+    address: patient.address ?? null,
+    occupation: patient.occupation ?? null,
+    emergencyContactName: patient.emergencyContactName ?? null,
+    emergencyContactNumber: patient.emergencyContactNumber ?? null,
+    primaryPhysician: patient.primaryPhysician ?? null,
+    insuranceProvider: patient.insuranceProvider ?? null,
+    insurancePolicyNumber: patient.insurancePolicyNumber ?? null,
+    allergies: patient.allergies ?? null,
+    currentMedication: patient.currentMedication ?? null,
+    familyMedicalHistory: patient.familyMedicalHistory ?? null,
+    pastMedicalHistory: patient.pastMedicalHistory ?? null,
+    identificationType: patient.identificationType ?? null,
+    identificationNumber: patient.identificationNumber ?? null,
+    privacyConsent: patient.privacyConsent ?? false,
+    treatmentConsent: patient.treatmentConsent ?? false,
+    disclosureConsent: patient.disclosureConsent ?? false,
         identificationDocumentUrl: file?.$id
           ? `${NEXT_PUBLIC_APPWRITE_ENDPOINT}/storage/buckets/${NEXT_PUBLIC_BUCKET_ID}/files/${file.$id}/view?project=${NEXT_PUBLIC_APPWRITE_PROJECT_ID}`
           : null,

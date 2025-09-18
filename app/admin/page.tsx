@@ -1,97 +1,14 @@
 import {DataTable} from '@/components/table/DataTable';
 import StatCard from '@/components/StatCard';
-import {columns, Payment} from '@/components/table/columns';
-import { getAppointmentSchema } from '@/lib/validation';
-import { Columns } from 'lucide-react';
+import {columns} from '@/components/table/columns';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
+import { getRecentAppointmentList } from '@/lib/actions/appointment.actions';
 
-async function getData(): Promise<Payment[]> {
-  // Fetch data from your API here.
-  return [
-    {
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },
-    {
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },{
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },{
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },{
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },{
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },{
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },{
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },{
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },{
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },{
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },{
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },{
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },{
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },{
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },
-  ]
-}
 
-export default async function Admin (){
-    const data = await getData();
+const AdminPage = async () => {
+  const appointments = await getRecentAppointmentList();
     return (
         <div className='mx-auto flex max-w-7xl flex-col space-y-14'>
             <header className='admin-header'>
@@ -131,8 +48,10 @@ export default async function Admin (){
                     icon="/assets/icons/cancelled.svg"
                     />
                 </section>
-                <DataTable columns = {columns} data={data}></DataTable>
+                <DataTable columns={columns} data={appointments.documents}/>
             </main>
         </div>
-    )
-}
+    );
+};
+export default AdminPage;
+

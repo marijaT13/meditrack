@@ -70,6 +70,7 @@ const RegisterForm = ({ user }: { user: any }) => {
             fieldType={FormFieldType.INPUT}
             control={form.control}
             name="name"
+            label="Name"
             placeholder="Marija Tashevska"
             iconSrc="/assets/icons/user.svg"
             iconAlt="user"
