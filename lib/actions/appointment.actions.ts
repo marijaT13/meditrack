@@ -13,6 +13,7 @@ import {
   PATIENT_TABLE_ID,
 } from "../appwrite.config";
 import { formatDateTime, parseStringify } from "../utils";
+import { parse } from "path";
 
 //  CREATE APPOINTMENT
 export const createAppointment = async (
@@ -106,3 +107,27 @@ export const getRecentAppointmentList = async () => {
     );
   }
 };
+
+// UPDATE APPOINTMENT
+export const updateAppointment = async ({
+  appointmentId, userId, appointment, type
+ }: UpdateAppointmentParams) => {
+    try{
+      const updatedAppointment = await databases.updateDocument(
+        DATABASE_ID!,
+        APPOINTMENT_TABLE_ID!,
+        appointmentId,
+        appointment
+      );
+      if (!updatedAppointment){
+        throw new Error("Appointment not found");
+      }
+      //SMS Notification
+
+      revalidatePath("/admin");
+      return parseStringify(updatedAppointment);
+    }catch(error){
+      console.log(error)
+    }
+
+ }
