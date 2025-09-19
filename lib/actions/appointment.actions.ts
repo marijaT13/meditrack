@@ -1,24 +1,39 @@
-"use server"
-import { ID, Query } from "node-appwrite";
-import { APPOINTMENT_TABLE_ID, DATABASE_ID, databases } from "../appwrite.config";
-import { parseStringify } from "../utils";
-import { Appointment } from "@/types/appwrite.types";
-import { NextResponse } from "next/server";
+"use server";
 
-export const createAppointment = async (appointment:CreateAppointmentParams) => {
-    try{
-         const newAppointment = await databases.createDocument(
-              DATABASE_ID!,
-              APPOINTMENT_TABLE_ID!,
-              ID.unique(),
-              appointment
-            );
-        
-            return parseStringify(newAppointment);
-    }catch(error){
-        console.log(error);
-    }
+import { revalidatePath } from "next/cache";
+import { ID, Query } from "node-appwrite";
+
+import { Appointment } from "@/types/appwrite.types";
+
+import {
+  APPOINTMENT_TABLE_ID,
+  DATABASE_ID,
+  databases,
+  messaging,
+  PATIENT_TABLE_ID,
+} from "../appwrite.config";
+import { formatDateTime, parseStringify } from "../utils";
+
+//  CREATE APPOINTMENT
+export const createAppointment = async (
+  appointment: CreateAppointmentParams
+) => {
+  try {
+    const newAppointment = await databases.createDocument(
+      DATABASE_ID!,
+      APPOINTMENT_TABLE_ID!,
+      ID.unique(),
+      appointment
+    );
+
+    revalidatePath("/admin");
+    return parseStringify(newAppointment);
+  } catch (error) {
+    console.error("An error occurred while creating a new appointment:", error);
+  }
 };
+
+// GET RECENT APPOINTMENTS WITH PATIENT DATA
 export const getRecentAppointmentList = async () => {
   try {
     const appointments = await databases.listDocuments(
@@ -27,54 +42,60 @@ export const getRecentAppointmentList = async () => {
       [Query.orderDesc("$createdAt")]
     );
 
-    // const scheduledAppointments = (
-    //   appointments.documents as Appointment[]
-    // ).filter((appointment) => appointment.status === "scheduled");
+    console.log("Appointments fetched:", appointments);
 
-    // const pendingAppointments = (
-    //   appointments.documents as Appointment[]
-    // ).filter((appointment) => appointment.status === "pending");
+    // 1. Get unique patient IDs from appointments
+    const patientIds = Array.from(
+      new Set(
+        (appointments.documents as any[]).map((a) => a.patient) // assuming "patient" is the relationship field
+      )
+    );
 
-    // const cancelledAppointments = (
-    //   appointments.documents as Appointment[]
-    // ).filter((appointment) => appointment.status === "cancelled");
+    // 2. Fetch only the patients that have appointments
+    const patients = await databases.listDocuments(
+      DATABASE_ID!,
+      PATIENT_TABLE_ID!,
+      [Query.equal("$id", patientIds)]
+    );
 
-    // const data = {
-    //   totalCount: appointments.total,
-    //   scheduledCount: scheduledAppointments.length,
-    //   pendingCount: pendingAppointments.length,
-    //   cancelledCount: cancelledAppointments.length,
-    //   documents: appointments.documents,
-    // };
+    const patientMap = new Map(
+      patients.documents.map((p: any) => [p.$id, p])
+    );
 
+    // 3. Attach patient objects to appointments
+    const enrichedAppointments = (appointments.documents as any[]).map(
+      (appointment) => ({
+        ...appointment,
+        patient: patientMap.get(appointment.patient), // replace ID with full patient object
+      })
+    );
+
+    // 4. Count statuses
     const initialCounts = {
       scheduledCount: 0,
       pendingCount: 0,
       cancelledCount: 0,
     };
 
-    const counts = (appointments.documents as unknown as Appointment[]).reduce(
-      (acc, appointment) => {
-        switch (appointment.status) {
-          case "scheduled":
-            acc.scheduledCount++;
-            break;
-          case "pending":
-            acc.pendingCount++;
-            break;
-          case "cancelled":
-            acc.cancelledCount++;
-            break;
-        }
-        return acc;
-      },
-      initialCounts
-    );
+    const counts = enrichedAppointments.reduce((acc, appointment) => {
+      switch (appointment.status) {
+        case "scheduled":
+          acc.scheduledCount++;
+          break;
+        case "pending":
+          acc.pendingCount++;
+          break;
+        case "cancelled":
+          acc.cancelledCount++;
+          break;
+      }
+      return acc;
+    }, initialCounts);
 
     const data = {
       totalCount: appointments.total,
       ...counts,
-      documents: appointments.documents,
+      documents: enrichedAppointments,
     };
 
     return parseStringify(data);

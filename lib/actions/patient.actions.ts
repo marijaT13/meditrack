@@ -25,7 +25,6 @@ export type CreateUserParams = {
 
 export type RegisterUserParams = {
   email: string;
-  password: string;
   phone: string;
   name: string;
   userId: string;
@@ -120,12 +119,10 @@ export const registerPatient = async ({
       ID.unique(),
       {
        email: patient.email,
-    password: "someDefaultOrGeneratedPassword123!", // Or patient.password if real one
     name: patient.name,
     userId,
     gender: normalizedGender,
         phone: patient.phone,
-
     birthDate: patient.birthDate, 
     address: patient.address ?? null,
     occupation: patient.occupation ?? null,
