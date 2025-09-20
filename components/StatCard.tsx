@@ -30,4 +30,4 @@ const StatCard = ({count = 0, label, icon, type }: StatCardProps) =>{
         </div>
     )
 }
-export default StatCard
+export default StatCard;

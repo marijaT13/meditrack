@@ -43,8 +43,6 @@ export const getRecentAppointmentList = async () => {
       [Query.orderDesc("$createdAt")]
     );
 
-    console.log("Appointments fetched:", appointments);
-
     // 1. Get unique patient IDs from appointments
     const patientIds = Array.from(
       new Set(

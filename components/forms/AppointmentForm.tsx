@@ -18,8 +18,6 @@ import { createAppointment, updateAppointment } from "@/lib/actions/appointment.
 import { getAppointmentSchema } from "@/lib/validation"
 import { Appointment } from "@/types/appwrite.types"
 
-
-
 const AppointmentForm = ({
   userId,
   patientId,
@@ -42,11 +40,11 @@ const AppointmentForm = ({
     const form = useForm<z.infer<typeof AppointmentFormValidation>>({
             resolver: zodResolver(AppointmentFormValidation),
             defaultValues: {
-            primaryPhysician: "",
-            schedule: new Date(),
-            reason: "",
-            note: "",
-            cancellationReason: "",
+            primaryPhysician: appointment ? appointment.primaryPhysician : " ",
+            schedule: appointment ? new Date(appointment.schedule) : new Date(),
+            reason: appointment ? appointment.reason : "",
+            note: appointment ? appointment.note : "",
+            cancellationReason: "", 
             },
         });
 
@@ -86,6 +84,7 @@ const AppointmentForm = ({
           router.push(`/patients/${userId}/new-appointment/success?appointmentId=${appointment.$id}`);
         }
       }else{
+        console.log("Updating appointment with values:", values);
         const appointmentToUpdate = {
           userId,
           appointmentId:appointment?.$id!,
@@ -106,7 +105,7 @@ const AppointmentForm = ({
       }
     } catch (error) {
       console.error("Failed to create appointment:", error);
-  alert("Could not create appointment. Please try again.");
+      alert("Could not create appointment. Please try again.");
     }
     setIsLoading(false);
   }
@@ -125,10 +124,10 @@ const AppointmentForm = ({
     return(
        <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 flex-1">
-       <section className="mb-12 space-y-4">
+       {type === 'create' && <section className="mb-12 space-y-4">
         <h1 className="header">New Appointment</h1>
         <p className="text-dark-700">Request a new appointment in seconds.</p>
-       </section>
+       </section>}
 
         {type !=="cancel" &&(
           <>
