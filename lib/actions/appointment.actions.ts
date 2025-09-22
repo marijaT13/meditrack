@@ -120,7 +120,13 @@ export const updateAppointment = async ({
       if (!updatedAppointment){
         throw new Error("Appointment not found");
       }
-      //SMS Notification
+      const smsMessage = `
+      Hi, it is MediCall. 
+      ${type ==='schedule' ? `Your appointment is scheduled for ${formatDateTime(appointment.schedule!).dateTime} with Dr.${appointment.primaryPhysician}. Please be on time.`
+      :`We regret to inform you that your appointment has been cancelled for the following reason: ${appointment.cancellationReason}`
+      }
+      `
+      await sendSMSNotification(userId, smsMessage);
 
       revalidatePath("/admin");
       return parseStringify(updatedAppointment);
@@ -142,3 +148,17 @@ export const updateAppointment = async ({
     console.error("An error occurred while retrieving the existing patient:", error);
   } 
 };
+//SMS NOTIFICATION FUNCTION
+export const sendSMSNotification = async (userId:string, content:string) =>{
+  try{
+    const message = await messaging.createSMS(
+      ID.unique(),
+      content,
+      [],
+      [userId]
+    );
+    return parseStringify(message);
+  }catch(error){
+    console.log(error)
+  }
+}
