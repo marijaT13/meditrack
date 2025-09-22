@@ -25,9 +25,9 @@ export default async function Appointment(props: SearchParamProps) {
           />
             <AppointmentForm
             type="create"
-            userId={userId} 
-            patientId={patient?.$id}   
-            />
+            userId={userId}
+            patientId={patient?.$id} 
+               />
           
             <p className="copyright mt-10 py-12">
               ©2025 MediCall
