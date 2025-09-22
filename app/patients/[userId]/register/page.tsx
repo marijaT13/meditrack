@@ -33,14 +33,14 @@ const RegisterPage = async ({ params }: SearchParamProps) => {
             src="/assets/icons/logo-full2.svg"
             height={1000}
             width={1000}
-            alt="MediCall Logo"
+            alt="MediTrack Logo"
             className="mb-12 h-10 w-fit"
           />
 
           {/* Pass user object to the form */}
           <RegisterForm user={user} />
 
-          <p className="copyright py-12">© 2025 MediCall</p>
+          <p className="copyright py-12">© 2025 MediTrack</p>
         </div>
       </section>
 

@@ -30,7 +30,7 @@ export default async function Appointment(props: SearchParamProps) {
                />
           
             <p className="copyright mt-10 py-12">
-              ©2025 MediCall
+              ©2025 МediTrack
             </p>
           
         </div>

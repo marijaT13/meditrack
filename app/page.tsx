@@ -23,23 +23,23 @@ export default function Home() {
             src="/assets/icons/logo-full2.svg"
             height={900}
             width={900}
-            alt="MediCall logo"
+            alt="MediTrack logo"
             className="mb-8 h-12 w-fit"
           />
            <section className='w-full space-y-4'>
-                    <p className='text-dark-700 mb-8'>You can start here.</p>
+                    <p className='text-dark-700 mb-8'>Добредојде на MediTrack. Започни тука.</p>
             </section>
           <PatientForm />
           
           <div className="text-14-regular m-20 flex justify-between">
             <p className="copyright">
-              ©2025 MediCall
+              ©2025 MediTrack
             </p>
             <button
               className="text-green-600"
               onClick={() => setShowPasskey(true)}
             >
-              Admin
+              Администратор
             </button>
           </div>
         </div>

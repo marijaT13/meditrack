@@ -14,7 +14,7 @@ const AdminPage = async () => {
             <header className='admin-header'>
                 <Link href="/" className='cursor-pointer'>
                 <Image
-                src="/assets/icons/logo-full.svg"
+                src="/assets/icons/logo-full2.svg"
                 height={32}
                 width={162}
                 alt='logo'
@@ -25,26 +25,28 @@ const AdminPage = async () => {
             </header>
             <main className='admin-main'>
                 <section className='w-full space-y-4'>
-                    <h1 className='header'> Welcome Admin 🧩</h1>
-                    <p className='text-dark-700'>Start the day with managing new appointments.</p>
+                    <h1 className='header'> Добредојде 🧩</h1>
+                    <p className='text-dark-700'>
+                        Започни со прегледување на најновите закажани термини и управување со системот.
+                    </p>
                 </section>
                 <section className='admin-stat'>
                     <StatCard
                     type="appointments"
                     count = {appointments.scheduledCount}
-                    label = "Scheduled appointments"
+                    label = "Закажани термини"
                     icon="/assets/icons/appointments.svg"
                     />
                     <StatCard
                     type="pending"
                     count = {appointments.pendingCount}
-                    label = "Pending appointments"
+                    label = "Термини во очекување"
                     icon="/assets/icons/pending.svg"
                     />
                     <StatCard
                     type="cancelled"
                     count = {appointments.cancelledCount}
-                    label = "Cancelled appointments"
+                    label = "Откажани термини"
                     icon="/assets/icons/cancelled.svg"
                     />
                 </section>

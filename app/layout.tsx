@@ -12,7 +12,7 @@ const fontSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "MediCall",
+  title: "MediTrack",
   description: "A healthcare managment system",
 
   

@@ -35,13 +35,13 @@ const Success= async({
                         alt='success'
                     />
                 <h2 className='header mb-6 max-w-[600px] text-center'>
-                    Your <span className='text-green-500'>appointment request</span> has been successfully submitted
+                    Твоето <span className='text-green-500'>барање за термин</span> е успешно испратено!
                 </h2>
-                <p> We&apos;ll be in touch shortly to confirm.</p>
+                <p>За кратко ќе бидете контактирани. </p>
                 </section>
 
                 <section className='request-details'>
-                    <p> Requested appointment details: </p>
+                    <p> Детали за вашиот побаран термин: </p>
                     <div className='flex items-center gap-3'>
                         <Image
                         src={doctor?.image!}
@@ -50,7 +50,7 @@ const Success= async({
                         height={100}
                         className='size-6'
                         />
-                        <p className='whitespace-nonwrap'>Dr. {doctor?.name}</p>
+                        <p className='whitespace-nonwrap'>Др. {doctor?.name}</p>
                     </div>
                     <div className='flex gap-2'>
                         <Image
@@ -64,10 +64,10 @@ const Success= async({
                 </section>
                 <Button variant="outline" className='shad-primary-btn' asChild>
                     <Link href={`/patients/${userId}/new-appointment`}> 
-                    New appointments </Link>
+                    Нов термин </Link>
                 </Button>
                  <p className="copyright">
-                    ©2025 MediCall
+                    ©2025 MediTrack
                  </p>
             </div>
         </div>

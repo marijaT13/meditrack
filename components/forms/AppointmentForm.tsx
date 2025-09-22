@@ -113,20 +113,20 @@ const AppointmentForm = ({
   let buttonLabel;
   switch (type) {
     case "cancel":
-      buttonLabel = "Cancel Appointment";
+      buttonLabel = "Откажи термин";
       break;
     case "schedule":
-      buttonLabel = "Schedule Appointment";
+      buttonLabel = "Закажи термин";
       break;
     default:
-      buttonLabel = "Submit Apppointment";
+      buttonLabel = "Поднеси барање";
   }
     return(
        <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 flex-1">
        {type === 'create' && <section className="mb-12 space-y-4">
-        <h1 className="header">New Appointment</h1>
-        <p className="text-dark-700">Request a new appointment in seconds.</p>
+        <h1 className="header">Креирај нов термин</h1>
+        <p className="text-dark-700">Поднеси барање за нов термин.</p>
        </section>}
 
         {type !=="cancel" &&(
@@ -135,7 +135,7 @@ const AppointmentForm = ({
             fieldType={FormFieldType.SELECT}
             control={form.control}
             name="primaryPhysician"
-            label="Doctor"
+            label="Доктор"
             placeholder="Select a doctor"
           >
             {Doctors.map((doctor, i) => (
@@ -157,7 +157,7 @@ const AppointmentForm = ({
                 fieldType={FormFieldType.DATE_PICKER}
                 control={form.control}
                 name="schedule"
-                label="Expected appointment date"
+                label="Датум и време на термин"
                 showTimeSelect
                 dateFormat="dd/MM/yyyy - h:mm aa"
               >
@@ -168,15 +168,15 @@ const AppointmentForm = ({
                 fieldType={FormFieldType.TEXTAREA}
                 control={form.control}
                 name="reason"
-                label="Reason for appointment"
-                placeholder="Enter reason for appointment"
+                label="Причина за термин"
+                placeholder="Внеси причина за барање на термин"
               />
               <CustomFormField
                 fieldType={FormFieldType.TEXTAREA}
                 control={form.control}
                 name="note"
-                label="Note"
-                placeholder="Enter additional notes"
+                label="Нота"
+                placeholder="Внеси нота (опционално)"
               />
             </div>
 
@@ -187,8 +187,8 @@ const AppointmentForm = ({
             fieldType={FormFieldType.TEXTAREA}
             control={form.control}
             name="cancellationReason"
-            label="Reason for cancellation"
-            placeholder="Enter reason for cancellation"
+            label="Причина за откажување"
+            placeholder="Внеси причина за откажување"
           />
         )}
         <SubmitButton isLoading={isLoading} 

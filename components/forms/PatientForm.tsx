@@ -50,24 +50,24 @@ const PatientForm = () => {
           fieldType={FormFieldType.INPUT}
           control={form.control}
           name="name"
-          label="Full Name"
+          label="Целосно име и презиме"
           placeholder="Marija Tashevska"
         />
         <CustomFormField
           fieldType={FormFieldType.INPUT}
           control={form.control}
           name="email"
-          label="Email"
+          label="Е-пошта"
           placeholder="tashevska.marija@uklo.edu.mk"
         />
         <CustomFormField
           fieldType={FormFieldType.PHONE_INPUT}
           control={form.control}
           name="phone"
-          label="Phone Number"
+          label="Телефонски број"
           placeholder="(389)70123456"
         />
-        <SubmitButton isLoading={isLoading}>Get Started</SubmitButton>
+        <SubmitButton isLoading={isLoading}>Започни</SubmitButton>
       </form>
     </Form>
   );

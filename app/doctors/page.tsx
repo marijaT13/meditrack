@@ -16,12 +16,15 @@ export default function DoctorsPage() {
           />
           <section className="w-full space-y-4">
             <p className="text-dark-700 mb-8">
-              Doctors, sign in with your email and phone number.
+              Доктор или администратор? Најавете се тука.
             </p>
           </section>
 
           {/* Admin/Doctor Login */}
           <DoctorsForm />
+          <p className="copyright m-4">
+              ©2025 МediTrack
+            </p>
         </div>
       </section>
 

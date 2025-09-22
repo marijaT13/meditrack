@@ -79,20 +79,20 @@ const DoctorForm = () => {
           fieldType={FormFieldType.INPUT}
           control={form.control}
           name="email"
-          label="Email"
+          label="Е-пошта"
           placeholder="doctor@example.com"
         />
         <CustomFormField
           fieldType={FormFieldType.PHONE_INPUT}
           control={form.control}
           name="phone"
-          label="Phone Number"
+          label=" Телефонски број"
           placeholder="(389)70123456"
         />
 
         {error && <p className="text-red-500">{error}</p>}
 
-        <SubmitButton isLoading={isLoading}>Sign In / Register</SubmitButton>
+        <SubmitButton isLoading={isLoading}>Најави се</SubmitButton>
       </form>
     </Form>
   );

@@ -28,19 +28,19 @@ export const columns: ColumnDef<Appointment>[] = [
   },
   {
     accessorKey:'patient',
-    header:'Patient',
+    header:'Пациент',
     cell:({row})=> <p className="text-14-medium">{row.original.patient.name}</p>
   },
   {
     accessorKey: "status",
-    header: "Status",
+    header: "Статус",
     cell:({row}) => (<div className="min-w-[115px]">
        <StatusBadge status={row.original.status} />
     </div>)
   },
   {
     accessorKey: "schedule",
-    header: "Appointment",
+    header: "Термин",
     cell:({row})=>{
       return <p className="text-14-regular min-w-[100px]">
         {formatDateTime(row.original.schedule).dateTime}</p>
@@ -48,7 +48,7 @@ export const columns: ColumnDef<Appointment>[] = [
   },
   {
     accessorKey: "primaryPhysician",
-    header: () => 'Doctor',
+    header: () => 'Доктор',
     cell: ({ row }) => {
       const doctor = Doctors.find((doc) => doc.name === row.original.primaryPhysician)
       
@@ -62,14 +62,14 @@ export const columns: ColumnDef<Appointment>[] = [
           height={100}
           className="size-8 rounded-full object-cover"
           />
-          <p className="whitespace-nowrap"> Dr. {doctor.name}</p>
+          <p className="whitespace-nowrap"> Др. {doctor.name}</p>
         </div>
       )
     },
   },
    {
     id: "actions",
-    header: () => <div className="pl-4">Actions</div>,
+    header: () => <div className="pl-4">Делувања </div>,
     cell: ({ row: {original: data} }) => {
       return (
         <div className="flex gap-1">
