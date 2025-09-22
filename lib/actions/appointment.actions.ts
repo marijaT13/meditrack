@@ -122,7 +122,7 @@ export const updateAppointment = async ({
       }
       const smsMessage = `
       Hi, it is MediCall. 
-      ${type ==='schedule' ? `Your appointment is scheduled for ${formatDateTime(appointment.schedule!).dateTime} with Dr.${appointment.primaryPhysician}. Please be on time.`
+      ${type ==='schedule' ? `Your appointment is scheduled for ${formatDateTime(appointment.schedule!).dateTime } with Dr.${appointment.primaryPhysician}. Please be on time.`
       :`We regret to inform you that your appointment has been cancelled for the following reason: ${appointment.cancellationReason}`
       }
       `

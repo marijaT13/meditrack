@@ -13,8 +13,8 @@ export const {
 const client = new sdk.Client();
 
 client
-  .setEndpoint(NEXT_PUBLIC_APPWRITE_ENDPOINT!) 
-  .setProject(NEXT_PUBLIC_APPWRITE_PROJECT_ID!) 
+  .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!) 
+  .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!) 
   .setKey(API_KEY!); 
 
 export const databases = new sdk.Databases(client);

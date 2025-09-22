@@ -1,17 +1,19 @@
+"use client"
 import PatientForm from "@/components/forms/PatientForm";
-import PasskeyModal from "@/components/PasskeyModal";
+import { PasskeyModal } from "@/components/PasskeyModal";
 
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
-export default function Home({searchParams}: SearchParamProps) {
-  const isAdmin = searchParams.admin === 'true';
-  //OTP VERIFICATION
+export default function Home() {
+    const [showPasskey, setShowPasskey] = useState(false);
+
 
   return (
     <div className="flex h-screen max-h-screen">
 
-      {isAdmin && <PasskeyModal/>}
+      {showPasskey && <PasskeyModal redirectTo="/doctors" onClose={() => setShowPasskey(false)} />}
       
       <section className="remove-scrollbar container my-auto">
         
@@ -33,9 +35,12 @@ export default function Home({searchParams}: SearchParamProps) {
             <p className="copyright">
               ©2025 MediCall
             </p>
-            <Link href="/?admin=true" className="text-green-600">
+            <button
+              className="text-green-600"
+              onClick={() => setShowPasskey(true)}
+            >
               Admin
-            </Link>
+            </button>
           </div>
         </div>
       </section>
