@@ -1,43 +1,47 @@
-"use client"
+"use client";
 import PatientForm from "@/components/forms/PatientForm";
 import { PasskeyModal } from "@/components/PasskeyModal";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useState } from "react";
 
 export default function Home() {
-    const [showPasskey, setShowPasskey] = useState(false);
-
+  const [showPasskey, setShowPasskey] = useState(false);
 
   return (
     <div className="flex h-screen max-h-screen">
-
-      {showPasskey && <PasskeyModal redirectTo="/doctors" onClose={() => setShowPasskey(false)} />}
       
-      <section className="remove-scrollbar flex-1 flex items-center justify-center px-6 py-10">
-        <div className="w-full max-w-md">
-          
-          <Image 
+      <div className="relative w-1/2 hidden md:flex items-center justify-center">
+        <Image
+          src="/assets/images/onboarding-img.png"
+          alt="Onboarding illustration"
+          width={600}
+          height={600}
+          className="w-full h-auto"
+        />
+      </div>
+
+      
+      <section className="flex w-full md:w-1/2 items-center justify-center p-6">
+        <div className="max-w-[400px] w-full space-y-6">
+          <Image
             src="/assets/icons/logo-full2.svg"
-            height={900}
-            width={900}
+            height={48}
+            width={180}
             alt="MediTrack logo"
-            className="mb-8 h-12 w-fit"
+            className="mb-4"
           />
 
-           <section className='w-full space-y-4'>
-              <p className='text-dark-700 mb-8'>Добредојде на MediTrack. Започни тука.</p>
-            </section>
+          <p className="text-dark-700">
+            Добредојде на MediTrack. Започни тука.
+          </p>
 
           <PatientForm />
-          
-          <div className="text-14-regular m-4 flex justify-between">
-            <p className="copyright ">
-              ©2025 MediTrack
-            </p>
+
+          <div className="flex justify-between items-center mt-4 text-sm text-gray-500">
+            <p>©2025 MediTrack</p>
             <button
-              className="text-green-600 hover:underline text-3xl-bold"
+              className="text-green-600 hover:underline font-semibold"
               onClick={() => setShowPasskey(true)}
             >
               Администратор
@@ -45,16 +49,14 @@ export default function Home() {
           </div>
         </div>
       </section>
-        <div className="relative w-full h-64 sm:w-1/2 sm:h-full">
-        <Image
-          src="/assets/images/onboarding-img.png"
-          alt="Onboarding illustration"
-          width={1000}
-          height={1000}
-          className="w-full h-auto hidden md:inline-flex"
+
+      {/* Passkey Modal */}
+      {showPasskey && (
+        <PasskeyModal
+          redirectTo="/doctors"
+          onClose={() => setShowPasskey(false)}
         />
-      </div>
-        
+      )}
     </div>
   );
 }
