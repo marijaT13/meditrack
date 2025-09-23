@@ -45,13 +45,14 @@ const PatientForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 flex-1">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 w-full  mx-auto">
         <CustomFormField
           fieldType={FormFieldType.INPUT}
           control={form.control}
           name="name"
           label="Целосно име и презиме"
           placeholder="Marija Tashevska"
+          
         />
         <CustomFormField
           fieldType={FormFieldType.INPUT}

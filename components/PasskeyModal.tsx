@@ -52,7 +52,7 @@ export const PasskeyModal = ({ redirectTo = "/doctors", onClose }: PasskeyModalP
       <AlertDialogContent className="shad-alert-dialog">
         <AlertDialogHeader>
           <AlertDialogTitle className="flex items-start justify-between">
-            Admin Access Verification
+            Администраторски пристап
             <Image
               src="/assets/icons/close.svg"
               alt="close"
@@ -63,7 +63,7 @@ export const PasskeyModal = ({ redirectTo = "/doctors", onClose }: PasskeyModalP
             />
           </AlertDialogTitle>
           <AlertDialogDescription>
-            To access the admin page, please enter the passkey.
+            За влез во администраторскиот панел, внесете го вашиот код.
           </AlertDialogDescription>
         </AlertDialogHeader>
 
@@ -74,11 +74,23 @@ export const PasskeyModal = ({ redirectTo = "/doctors", onClose }: PasskeyModalP
             onChange={(value) => setPasskey(value)}
           >
             <InputOTPGroup className="shad-otp">
-              {[0, 1, 2, 3, 4, 5].map((i) => (
-                <InputOTPSlot key={i} index={i} className="shad-otp-slot" />
-              ))}
-            </InputOTPGroup>
-          </InputOTP>
+            {[0, 1, 2, 3, 4, 5].map((i) => {
+              const isActive = i === passkey.length; // current slot
+              const isFilled = i < passkey.length;   // already typed
+              return (
+                <InputOTPSlot
+                  key={i}
+                  index={i}
+                  className={`
+                    shad-otp-slot
+                    ${isFilled ? "bg-blue-700 border-blue-300" : ""}
+                    ${isActive ? "border-red-500 animate-pulse" : ""}
+                  `}
+                      />
+                    );
+                  })}
+              </InputOTPGroup>
+        </InputOTP>
 
           {error && (
             <p className="shad-error text-14-regular mt-4 flex justify-center">{error}</p>
@@ -90,7 +102,7 @@ export const PasskeyModal = ({ redirectTo = "/doctors", onClose }: PasskeyModalP
             onClick={validatePasskey}
             className="shad-primary-btn w-full"
           >
-            Enter Admin Passkey
+            Внеси код
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
