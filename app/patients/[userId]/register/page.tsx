@@ -27,8 +27,19 @@ const RegisterPage = async ({ params }: SearchParamProps) => {
 
   return (
     <div className="flex h-screen max-h-screen">
-      <section className="remove-scrollbar container">
+    
+     <div className="absolute -top-16 -left-16 w-40 h-40 rounded-full bg-blue-600 opacity-50 -z-30"></div>
+      <div className="absolute top-8 right-8 w-32 h-20 rounded-full bg-red-600 opacity-40 -z-30"></div>
+      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-green-900 -z-40 opacity-60"></div>
+
+      <div
+          className="absolute bottom-8 right-16 w-32 h-32 bg-green-600 -z-30"
+          style={{ clipPath: "polygon(50% 0%, 0% 100%, 100% 100%)", opacity: 0.3 }}
+        ></div>
+    
+        <section className="remove-scrollbar container ">
         <div className="sub-container max-w-[860px] flex-1 flex-col py-10">
+          
           <Image
             src="/assets/icons/logo-full2.svg"
             height={1000}
@@ -40,17 +51,11 @@ const RegisterPage = async ({ params }: SearchParamProps) => {
           {/* Pass user object to the form */}
           <RegisterForm user={user} />
 
-          <p className="copyright py-12">© 2025 MediTrack</p>
+          <p className="text-center text-sm text-gray-500 py-5">
+            ©2025 МediTrack
+          </p>
         </div>
       </section>
-
-      <Image
-        src="/assets/images/register-img.png"
-        height={500}
-        width={500}
-        alt="Register Illustration"
-        className="side-img max-w-[30%] mr-11"
-      />
     </div>
   );
 };

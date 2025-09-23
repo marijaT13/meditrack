@@ -121,8 +121,8 @@ export const updateAppointment = async ({
         throw new Error("Appointment not found");
       }
       const smsMessage = `
-      Hi, it is MediCall. 
-      ${type ==='schedule' ? `Your appointment is scheduled for ${formatDateTime(appointment.schedule!).dateTime } with Dr.${appointment.primaryPhysician}. Please be on time.`
+      Hi, it is MediTrack. 
+      ${type ==='schedule' ? `Your appointment is scheduled for ${formatDateTime(appointment.schedule!).dateTime } with Др.${appointment.primaryPhysician}. Please be on time.`
       :`We regret to inform you that your appointment has been cancelled for the following reason: ${appointment.cancellationReason}`
       }
       `

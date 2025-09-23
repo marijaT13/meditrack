@@ -1,7 +1,6 @@
 "use client";
 import PatientForm from "@/components/forms/PatientForm";
 import { PasskeyModal } from "@/components/PasskeyModal";
-
 import Image from "next/image";
 import { useState } from "react";
 
@@ -10,10 +9,10 @@ export default function Home() {
 
   return (
     <div className="flex h-screen max-h-screen">
-      
+
       <div className="relative w-1/2 hidden md:flex items-center justify-center">
         <Image
-          src="/assets/images/onboarding-img.png"
+          src="/assets/images/onboarding-img2.png"
           alt="Onboarding illustration"
           width={600}
           height={600}
@@ -23,6 +22,8 @@ export default function Home() {
 
       
       <section className="flex w-full md:w-1/2 items-center justify-center p-6">
+        <div className="absolute -top-32 -right-32 w-[600px] h-[850px] bg-red-500 rotate-45  -z-10" style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }}></div>
+
         <div className="max-w-[400px] w-full space-y-6">
           <Image
             src="/assets/icons/logo-full2.svg"
@@ -32,7 +33,7 @@ export default function Home() {
             className="mb-4"
           />
 
-          <p className="text-dark-700">
+          <p className="text-dark-700 ">
             Добредојде на MediTrack. Започни тука.
           </p>
 
