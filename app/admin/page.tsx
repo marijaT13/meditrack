@@ -12,7 +12,9 @@ const AdminPage = async () => {
 
   return (
     <div className="mx-auto flex max-w-7xl flex-col space-y-14">
-      <header className="admin-header">
+        <div className="absolute -top-32 -left-32 w-[550px] h-[550px] bg-red-600 rounded-full -z-10"></div>
+
+        <header className="admin-header">
         <Link href="/" className="cursor-pointer">
           <Image
             src="/assets/icons/logo-full2.svg"
@@ -29,7 +31,7 @@ const AdminPage = async () => {
 
       <main className="admin-main">
         <section className="w-full space-y-4">
-          <h1 className="header">Добредојде 🧩</h1>
+          <h1 className="header">Добредојде</h1>
           <p className="text-dark-700">
             Започни со прегледување на најновите закажани термини и управување со системот.
           </p>

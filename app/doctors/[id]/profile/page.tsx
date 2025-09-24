@@ -45,7 +45,9 @@ const DoctorProfilePage = async ({ params }: Props) => {
   );
 
   return (
-    <div className="mx-auto flex max-w-7xl flex-col space-y-14">
+    <div className="remove-scrollbar mx-auto flex max-w-7xl flex-col space-y-14">
+      <div className="absolute -bottom-32 -right-32 w-[500px] h-[500px] bg-green-500 rounded-full -z-10"></div>
+        <div className="absolute -top-32 -left-32 w-[400px] h-[400px] bg-green-600 rounded-full -z-10"></div>
       <header className="admin-header flex items-center justify-between">
         <Link href="/" className="cursor-pointer">
           <Image
@@ -58,7 +60,14 @@ const DoctorProfilePage = async ({ params }: Props) => {
         </Link>
 
         <Button asChild>
-          <Link href="/admin">Админ Панел</Link>
+          <Link href="/admin">
+          <Image
+                  src="/assets/icons/admin-dashboard.svg"
+                  width={32}
+                  height={32}
+                  alt="admin dashboard"
+                  />
+          </Link>
         </Button>
       </header>
 
@@ -68,8 +77,8 @@ const DoctorProfilePage = async ({ params }: Props) => {
           <Image
             src={doctor.image}
             alt={doctor.name}
-            width={120}
-            height={120}
+            width={100}
+            height={100}
             className="mx-auto rounded-full shadow-md"
           />
           <h1 className="header">Добредојде, {doctor.name}</h1>
@@ -78,14 +87,14 @@ const DoctorProfilePage = async ({ params }: Props) => {
         </section>
 
         {/* Patients with Appointments */}
-        <section className="grid">
-          <Card className="shadow-md rounded-2xl">
+        <section className="grid place-items-center">
+          <Card className="w-full max-w-4xl shadow-md rounded-2xl ">
             <CardHeader>
               <CardTitle className="text-lg font-semibold">
                 Пациенти со закажани термини ({appointments.total})
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="flex justify-center">
               {appointments.total === 0 ? (
                 <p className="text-gray-500">Нема пациенти закажано.</p>
               ) : (
