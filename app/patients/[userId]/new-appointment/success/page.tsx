@@ -62,10 +62,19 @@ const Success= async({
                         <p>{formatDateTime(appointment.schedule).dateTime}</p>
                     </div>
                 </section>
-                <Button variant="outline" className='shad-primary-btn' asChild>
-                    <Link href={`/patients/${userId}/new-appointment`}> 
-                    Нов термин </Link>
-                </Button>
+                <div className='flex gap-10'>
+                    <Button variant='default' className='shad-primary-btn' asChild>
+                        <Link href={`/patients/${userId}/new-appointment`}> 
+                        Нов термин 
+                        </Link>
+                    </Button>
+                    <Button  variant='outline' className='bg-red-500' asChild>
+                        <Link href={`/patients/${userId}/profile`}>
+                        Кон твојот профил
+                        </Link>
+                    </Button>
+                </div>
+                
                  <p className="copyright">
                     ©2025 MediTrack
                  </p>

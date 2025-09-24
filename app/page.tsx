@@ -14,8 +14,8 @@ export default function Home() {
         <Image
           src="/assets/images/onboarding-img2.png"
           alt="Onboarding illustration"
-          width={600}
-          height={600}
+          width={400}
+          height={400}
           className="w-full h-auto"
         />
       </div>

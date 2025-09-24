@@ -17,6 +17,7 @@ client
   .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!) 
   .setKey(API_KEY!); 
 
+export const account = new sdk.Account(client);   // 👈 now you can use account.get()
 export const databases = new sdk.Databases(client);
 export const users = new sdk.Users(client);
 export const messaging = new sdk.Messaging(client);

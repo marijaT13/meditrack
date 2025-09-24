@@ -9,7 +9,7 @@ import { Form } from "@/components/ui/form";
 import CustomFormField from "../CustomFormField";
 import SubmitButton from "../ui/SubmitButton";
 import { UserFormValidation } from "@/lib/validation";
-import { createUser } from "@/lib/actions/patient.actions";
+import { createUser} from "@/lib/actions/patient.actions";
 
 export enum FormFieldType {
  INPUT='input',

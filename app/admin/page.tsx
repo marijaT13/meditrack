@@ -4,7 +4,8 @@ import {columns} from '@/components/table/columns';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
-import { getRecentAppointmentList } from '@/lib/actions/appointment.actions';
+import {  getRecentAppointmentList } from '@/lib/actions/appointment.actions';
+import { Button } from '@/components/ui/button';
 
 
 const AdminPage = async () => {
@@ -21,7 +22,9 @@ const AdminPage = async () => {
                 className='h-8 w-fit'
                 />
                 </Link>
-                <p className='text-16-semibold'> Admin Dashboard</p>
+                 <Button asChild>
+                    <Link href="/doctors/profile">Мој Профил</Link>
+                </Button>
             </header>
             <main className='admin-main'>
                 <section className='w-full space-y-4'>

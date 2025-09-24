@@ -104,4 +104,5 @@ export function getAppointmentSchema(type: string) {
 export const DoctorFormValidation = z.object({
   email: z.string().email("Invalid email address"),
   phone: z.string().min(5, "Invalid phone number"),
+  name: z.string().min(5,"Invalid name.")
 });

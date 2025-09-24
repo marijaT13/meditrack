@@ -11,13 +11,15 @@ import SubmitButton from "../ui/SubmitButton";
 import { DoctorFormValidation } from "@/lib/validation";
 import { FormFieldType } from "./PatientForm";
 import { decryptKey } from "@/lib/utils";
-import { verifyOrCreateDoctor } from "@/lib/actions/doctor.actions";
+import { checkDoctorExists } from "@/lib/actions/doctor.actions";
+import { account } from "@/lib/appwrite.config";
 
 // Server action
 
 interface DoctorFormValues {
   email: string;
   phone: string;
+  name: string;
 }
 
 const DoctorForm = () => {
@@ -28,7 +30,7 @@ const DoctorForm = () => {
 
   const form = useForm<DoctorFormValues>({
     resolver: zodResolver(DoctorFormValidation),
-    defaultValues: { email: "", phone: "" },
+    defaultValues: { email: "", phone: "", name:"" },
   });
 
   // ✅ Check if admin passkey is verified
@@ -44,25 +46,31 @@ const DoctorForm = () => {
     }
   }, []);
 
-  const onSubmit = form.handleSubmit(async (values) => {
-    if (!adminVerified) {
-      setError("You must enter the admin passkey first.");
+ const onSubmit = form.handleSubmit(async (values) => {
+  if (!adminVerified) {
+    setError("You must enter the admin passkey first.");
+    return;
+  }
+
+  setIsLoading(true);
+  setError("");
+
+  try {
+    // 1. Check doctor existence in collection
+    const doctor = await checkDoctorExists(values.email);
+
+    if (!doctor) {
+      setError("You are not registered as a doctor.");
       return;
     }
-
-    setIsLoading(true);
-    setError("");
-
-    try {
-      await verifyOrCreateDoctor(values.email, values.phone);
-      router.push("/admin");
-    } catch (err) {
-      console.error(err);
-      setError("Failed to verify or register doctor.");
-    } finally {
-      setIsLoading(false);
-    }
-  });
+    router.push("/admin"); // or "/doctors/profile"
+  } catch (err) {
+    console.error(err);
+    setError("Invalid credentials or failed login.");
+  } finally {
+    setIsLoading(false);
+  }
+});
 
   if (!adminVerified) {
     return (
@@ -75,6 +83,13 @@ const DoctorForm = () => {
   return (
     <Form {...form}>
       <form onSubmit={onSubmit} className="space-y-6 flex-1">
+        <CustomFormField
+          fieldType={FormFieldType.INPUT}
+          control={form.control}
+          name="name"
+          label="Име и презиме"
+          placeholder="Живко Попов"
+        />
         <CustomFormField
           fieldType={FormFieldType.INPUT}
           control={form.control}
