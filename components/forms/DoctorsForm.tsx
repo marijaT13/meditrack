@@ -13,13 +13,14 @@ import { FormFieldType } from "./PatientForm";
 import { decryptKey } from "@/lib/utils";
 import { checkDoctorExists } from "@/lib/actions/doctor.actions";
 import { account } from "@/lib/appwrite.config";
+import z from "zod";
 
-// Server action
+const DoctorLoginValidation = z.object({
+  email: z.string().email("Внесете валидна е-пошта"),
+});
 
 interface DoctorFormValues {
   email: string;
-  phone: string;
-  name: string;
 }
 
 const DoctorForm = () => {
@@ -29,8 +30,8 @@ const DoctorForm = () => {
   const [adminVerified, setAdminVerified] = useState(false);
 
   const form = useForm<DoctorFormValues>({
-    resolver: zodResolver(DoctorFormValidation),
-    defaultValues: { email: "", phone: "", name:"" },
+    resolver: zodResolver(DoctorLoginValidation),
+    defaultValues: { email: ""},
   });
 
   // ✅ Check if admin passkey is verified
@@ -63,7 +64,8 @@ const DoctorForm = () => {
       setError("You are not registered as a doctor.");
       return;
     }
-    router.push("/admin"); // or "/doctors/profile"
+    localStorage.setItem("doctorId", doctor.$id);
+    router.push(`/doctors/${doctor.$id}/profile`)
   } catch (err) {
     console.error(err);
     setError("Invalid credentials or failed login.");

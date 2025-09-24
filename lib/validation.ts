@@ -104,5 +104,12 @@ export function getAppointmentSchema(type: string) {
 export const DoctorFormValidation = z.object({
   email: z.string().email("Invalid email address"),
   phone: z.string().min(5, "Invalid phone number"),
-  name: z.string().min(5,"Invalid name.")
+  name: z
+    .string()
+    .min(2, { message: "Името мора да содржи најмалку 2 карактери" })
+    .regex(/^[\p{L}\s'-]+$/u, {
+      message: "Името може да содржи само букви",
+    })
+    .optional(),
+  image: z.string().min(10,"Invalid image url.")
 });
