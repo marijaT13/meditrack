@@ -1,12 +1,14 @@
 
+import LogoutButton from "@/components/LogoutButton";
 import StatCard from "@/components/StatCard";
 import { DataTable } from "@/components/table/DataTable";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { databases, DATABASE_ID, DOCTOR_TABLE_ID, NEXT_PUBLIC_BUCKET_ID, NEXT_PUBLIC_APPWRITE_PROJECT_ID, APPOINTMENT_TABLE_ID, PATIENT_TABLE_ID } from "@/lib/appwrite.config";
+import { databases, DATABASE_ID, DOCTOR_TABLE_ID, NEXT_PUBLIC_BUCKET_ID, NEXT_PUBLIC_APPWRITE_PROJECT_ID, APPOINTMENT_TABLE_ID, PATIENT_TABLE_ID, account } from "@/lib/appwrite.config";
 import Image from "next/image";
 import Link from "next/link";
+
 import { Query } from "node-appwrite";
 
 interface Props {
@@ -15,7 +17,6 @@ interface Props {
 
 const DoctorProfilePage = async ({ params }: Props) => {
   const doctorId = params.id;
-
   // Fetch doctor document
   const doctor = await databases.getDocument(
     DATABASE_ID!,
@@ -43,7 +44,7 @@ const DoctorProfilePage = async ({ params }: Props) => {
       }
     })
   );
-
+  
   return (
     <div className="remove-scrollbar mx-auto flex max-w-7xl flex-col space-y-14">
       <div className="absolute -bottom-32 -right-32 w-[500px] h-[500px] bg-green-500 rounded-full -z-10"></div>
@@ -119,6 +120,7 @@ const DoctorProfilePage = async ({ params }: Props) => {
               )}
             </CardContent>
           </Card>
+           <LogoutButton/>
         </section>
       </main>
     </div>
