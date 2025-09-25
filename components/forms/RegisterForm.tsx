@@ -268,7 +268,13 @@ const RegisterForm = ({ user }: { user: any }) => {
           <div className="mb-9 space-y-1">
             <h2 className="sub-header">Идентификација и верификација</h2>
           </div>
-
+          <CustomFormField
+            fieldType={FormFieldType.INPUT}
+            control={form.control}
+            name="identificationNumber"
+            label="Матичен број"
+            placeholder="0202002415000"
+          />
           <CustomFormField
             fieldType={FormFieldType.SELECT}
             control={form.control}
@@ -282,14 +288,6 @@ const RegisterForm = ({ user }: { user: any }) => {
               </SelectItem>
             ))}
           </CustomFormField>
-
-          <CustomFormField
-            fieldType={FormFieldType.INPUT}
-            control={form.control}
-            name="identificationNumber"
-            label="Број на идентификација"
-            placeholder="123456789"
-          />
 
           <CustomFormField
             fieldType={FormFieldType.SKELETON}

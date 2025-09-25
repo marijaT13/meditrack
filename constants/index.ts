@@ -28,17 +28,12 @@ export const PatientFormDefaultValues = {
 };
 
 export const IdentificationTypes = [
-  "Birth Certificate",
-  "Driver's License",
-  "Medical Insurance Card/Policy",
-  "Military ID Card",
-  "National Identity Card",
-  "Passport",
-  "Resident Alien Card (Green Card)",
-  "Social Security Card",
-  "State ID Card",
-  "Student ID Card",
-  "Voter ID Card",
+  "Извод од матично",
+  "Студенска легитимација",
+  "Здравствена книшка",
+  "Возачка дозвола",
+  "Лична карта",
+  "Пасош",
 ];
 
 export const Doctors = [
