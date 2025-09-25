@@ -12,9 +12,11 @@ import {
   databases,
   storage,
   users,
+  account,
 } from "../appwrite.config";
 
 import { parseStringify } from "../utils";
+import { redirect } from "next/dist/server/api-utils";
 
 // ------------------ TYPES ------------------
 export type CreateUserParams = {
@@ -53,6 +55,14 @@ export type RegisterUserParams = {
 // ------------------ CREATE USER ------------------
 export const createUser = async (user: CreateUserParams) => {
   try {
+    const existingUsers = await users.list(
+      [Query.equal("email", [user.email])]
+    );
+    if (existingUsers.total > 0) {
+      return parseStringify(existingUsers.users[0]);
+       // return existing user
+    }
+
     const newUser = await users.create(
       ID.unique(),
       user.email,
@@ -65,9 +75,9 @@ export const createUser = async (user: CreateUserParams) => {
   } catch (error: any) {
     if (error?.code === 409) {
       const existingUser = await users.list([Query.equal("email", [user.email])]);
-      return existingUser.users[0];
+      return parseStringify(existingUser.users[0]);
     }
-    console.error("Error creating user:", error);
+    console.error(`Error creating user: ${error?.message || error}`);
   }
 };
 
@@ -89,6 +99,16 @@ export const registerPatient = async ({
   ...patient
 }: any & { userId: string }) => {
   try {
+    const existing = await databases.listDocuments(
+      DATABASE_ID!,
+      PATIENT_TABLE_ID!,
+      [Query.equal("userId", userId)]
+    );
+
+    if (existing.total > 0) {
+      return parseStringify(existing.documents[0]);
+       // return existing patient
+    }
     const normalizedGender = (() => {
       switch (gender?.toLowerCase()) {
         case "male":
@@ -169,35 +189,53 @@ export const getPatient = async (userId: string) => {
 };
 
  // ------------------ UPDATE PATIENT ------------------
-export const updatePatient = async (documentId: string, data: any, file?: File) => {
+// export const updatePatient = async (documentId: string, data: any, file?: File) => {
+//   try {
+//     let fileId: string | undefined = data.identificationDocumentUrl;
+
+//     if (file) {
+//       const uploaded = await storage.createFile(
+//         NEXT_PUBLIC_BUCKET_ID!,
+//         ID.unique(),
+//         file
+//       );
+//       fileId = uploaded.$id;
+//     }
+
+//     // Use the document ID (not userId)
+//     const updatedPatient = await databases.updateDocument(
+//       DATABASE_ID!,
+//       PATIENT_TABLE_ID!,
+//       documentId,
+//       {
+//         ...data,
+//         identificationDocumentUrl: fileId
+//           ? `${process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT}/storage/buckets/${NEXT_PUBLIC_BUCKET_ID}/files/${fileId}/view?project=${process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID}`
+//           : data.identificationDocumentUrl,
+//       }
+//     );
+
+//     return updatedPatient;
+//   } catch (err) {
+//     console.error("Error updating patient:", err);
+//     throw err; // let form catch it
+//   }
+// };
+
+//send OTP via email
+export const sendOtp = async (email: string) => {
   try {
-    let fileId: string | undefined;
-
-    if (file) {
-      const uploaded = await storage.createFile(
-        NEXT_PUBLIC_BUCKET_ID!,
-        ID.unique(),
-        file
-      );
-      fileId = uploaded.$id;
-    }
-
-    // Use the document ID (not userId)
-    const updatedPatient = await databases.updateDocument(
-      DATABASE_ID!,
-      PATIENT_TABLE_ID!,
-      documentId,
-      {
-        ...data,
-        identificationDocumentUrl: fileId
-          ? `${process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT}/storage/buckets/${NEXT_PUBLIC_BUCKET_ID}/files/${fileId}/view?project=${process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID}`
-          : data.identificationDocumentUrl,
-      }
-    );
-
-    return updatedPatient;
-  } catch (err) {
-    console.error("Error updating patient:", err);
-    throw err; // let form catch it
+    const token = await account.createEmailToken(ID.unique(), email);
+    return token; // contains userId, expire time
+  } catch (error: any) {
+    throw new Error(`Error sending OTP: ${error?.message || error}`);
+  }
+};
+export const verifyOtp = async (userId: string, otp: string) => {
+  try {
+    const session = await account.createSession(userId, otp);
+    return session;
+  } catch (error: any) {
+    throw new Error(`Error verifying OTP: ${error?.message || error}`);
   }
 };

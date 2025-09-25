@@ -1,11 +1,14 @@
 "use client";
 import PatientForm from "@/components/forms/PatientForm";
 import { PasskeyModal } from "@/components/PasskeyModal";
+import { UserOtpModal } from "@/components/UserOtpModal";
 import Image from "next/image";
 import { useState } from "react";
 
 export default function Home() {
   const [showPasskey, setShowPasskey] = useState(false);
+  const [otpModalOpen, setOtpModalOpen] = useState(false);
+  const [otpUser, setOtpUser] = useState<{ userId: string; email: string } | null>(null);
 
   return (
     <div className="flex h-screen max-h-screen">
@@ -37,7 +40,12 @@ export default function Home() {
             Добредојде на MediTrack. Започни тука.
           </p>
 
-          <PatientForm />
+          <PatientForm
+           onExistingUser={(user) => {
+            setOtpUser(user);
+            setOtpModalOpen(true);
+          }}
+          />
 
           <div className="flex justify-between items-center mt-4 text-sm text-gray-500">
             <p>©2025 MediTrack</p>
@@ -58,6 +66,18 @@ export default function Home() {
           onClose={() => setShowPasskey(false)}
         />
       )}
+
+      {otpModalOpen && otpUser && (
+        <UserOtpModal
+          userId={otpUser.userId}
+          email={otpUser.email}
+          redirectTo="/new-appointment"
+          onClose={() => {
+            setOtpModalOpen(false); // just closes modal
+            setOtpUser(null);       // clear stored user
+          }}
+          />
+        )} 
     </div>
   );
 }

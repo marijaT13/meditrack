@@ -9,7 +9,7 @@ import { Form } from "@/components/ui/form";
 import CustomFormField from "../CustomFormField";
 import SubmitButton from "../ui/SubmitButton";
 import { UserFormValidation } from "@/lib/validation";
-import { createUser} from "@/lib/actions/patient.actions";
+import { createUser, sendOtp} from "@/lib/actions/patient.actions";
 
 export enum FormFieldType {
  INPUT='input',
@@ -21,9 +21,10 @@ export enum FormFieldType {
     SKELETON='skeleton',
 }
 
-const PatientForm = () => {
+const PatientForm = ({ onExistingUser }: { onExistingUser?: (user: { userId: string; email: string }) => void }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+ 
 
   const form = useForm({
     resolver: zodResolver(UserFormValidation),
@@ -31,17 +32,31 @@ const PatientForm = () => {
   });
 
   const onSubmit = async (values: any) => {
-    setIsLoading(true);
-    try {
-      const newUser = await createUser(values); // returns newUser.$id
-      const userId = newUser.$id;
+  setIsLoading(true);
+  try {
+    const newUser = await createUser(values); // returns either a new or existing user
+    const userId = newUser.$id;
 
-      if (newUser) router.push(`/patients/${userId}/register`);
-    } catch (error) {
-      console.error(error);
+    if (newUser?.$id) {
+      // If the user is newly created → go to patient registration
+      if (newUser.isNew) {
+        router.push(`/patients/${userId}/register`);
+      } else {
+        await sendOtp(newUser.email);
+        onExistingUser?.({userId:newUser.$id, email:newUser.email});
+      }
     }
+  } catch (error: any) {
+    console.error("Error in form submission:", error);
+    form.setError("email", {
+      type: "manual",
+      message: "Настана грешка. Обидете се повторно.",
+    });
+  } finally {
     setIsLoading(false);
-  };
+  }
+};
+
 
   return (
     <Form {...form}>
