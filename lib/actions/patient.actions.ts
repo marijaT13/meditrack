@@ -55,12 +55,16 @@ export type RegisterUserParams = {
 // ------------------ CREATE USER ------------------
 export const createUser = async (user: CreateUserParams) => {
   try {
-    const existingUsers = await users.list(
-      [Query.equal("email", [user.email])]
-    );
+   // Check if a user already exists by email
+    const existingUsers = await users.list([Query.equal("email", [user.email])]);
+
     if (existingUsers.total > 0) {
-      return parseStringify(existingUsers.users[0]);
-       // return existing user
+      const existingUser = existingUsers.users[0];
+      return {
+        $id: existingUser.$id,
+        email: existingUser.email,
+        isNew: false, // ⬅️ mark as existing
+      };
     }
 
     const newUser = await users.create(
@@ -71,13 +75,14 @@ export const createUser = async (user: CreateUserParams) => {
       user.name
     );
 
-    return parseStringify(newUser);
-  } catch (error: any) {
-    if (error?.code === 409) {
-      const existingUser = await users.list([Query.equal("email", [user.email])]);
-      return parseStringify(existingUser.users[0]);
-    }
-    console.error(`Error creating user: ${error?.message || error}`);
+     return {
+      $id: newUser.$id,
+      email: newUser.email,
+      isNew: true, // ⬅️ mark as new
+    };
+  } catch (error) {
+    console.error("Error creating user:", error);
+    throw error;
   }
 };
 

@@ -68,16 +68,16 @@ export default function Home() {
       )}
 
       {otpModalOpen && otpUser && (
-        <UserOtpModal
-          userId={otpUser.userId}
-          email={otpUser.email}
-          redirectTo="/new-appointment"
-          onClose={() => {
-            setOtpModalOpen(false); // just closes modal
-            setOtpUser(null);       // clear stored user
-          }}
-          />
-        )} 
+      <UserOtpModal
+        userId={otpUser.userId}
+        email={otpUser.email}
+        redirectTo="/new-appointment" // this will become /patients/[id]/new-appointment
+        onClose={() => {
+          setOtpModalOpen(false);
+          setOtpUser(null);
+        }}
+      />
+    )}
     </div>
   );
 }

@@ -34,25 +34,33 @@ export const UserOtpModal = ({userId, redirectTo = `/patients/${userId}/new-appo
     const [isLoading, setIsLoading] = useState(false);
     
     const validateOtp = async () => {
-      setIsLoading(true);
-      
-    try {
-      // If you created the API route, use this:
-      await verifyOtp(userId, otp);
+  setIsLoading(true);
+  try {
+    const session = await verifyOtp(userId, otp);
+    if (session) {
+      if (onClose) onClose();
 
-      // If your server function is client-callable you can use:
-      // await verifyOtp(userId, otp);
-
-      console.log("verify success - redirecting");
-      await router.push(`/patients/${userId}/new-appointment`);
-      onClose?.();
-    } catch (err: any) {
-      console.error("verify error:", err);
-      setError(err?.message ?? "Невалиден OTP код. Обидете се повторно.");
-    } finally {
-      setIsLoading(false);
+      // ✅ Always build the full patient path
+      if (redirectTo) {
+        // If redirectTo starts with /patients, respect it
+        if (redirectTo.startsWith("/patients")) {
+          router.push(redirectTo);
+        } else {
+          // Otherwise inject patientId into the path
+          router.push(`/patients/${userId}${redirectTo}`);
+        }
+      } else {
+        router.push(`/patients/${userId}/new-appointment`);
+      }
+    } else {
+      setError("Невалиден OTP код. Обидете се повторно.");
     }
-  };
+  } catch (err) {
+    setError("Настана грешка. Обидете се повторно.");
+  } finally {
+    setIsLoading(false);
+  }
+};
 
 
     
