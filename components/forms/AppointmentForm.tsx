@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Form } from "@/components/ui/form"
 import CustomFormField from "../CustomFormField"
 import SubmitButton from "../ui/SubmitButton"
-import { Dispatch, SetStateAction, useState } from "react"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { createUser } from "@/lib/actions/patient.actions"
 import { create } from "node:domain"
@@ -34,6 +34,7 @@ const AppointmentForm = ({
 }) => {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
+    const [unavailable, setUnavailable] = useState<Date[]>([]);
 
     const  AppointmentFormValidation = getAppointmentSchema(type);
         
@@ -47,6 +48,35 @@ const AppointmentForm = ({
             cancellationReason: "", 
             },
         });
+
+  useEffect(() => {
+  const fetchUnavailable = async () => {
+    const doctor = form.watch("primaryPhysician");
+    const schedule = form.watch("schedule"); // user-picked date
+
+    if (!doctor || !schedule) return;
+
+    try {
+      const day = new Date(schedule).toISOString().split("T")[0]; // YYYY-MM-DD
+      const res = await fetch(
+        `/api/appointments/unavailable?doctor=${doctor}&date=${day}`
+      );
+
+      if (!res.ok) {
+        console.error("API error:", res.status, await res.text());
+        return;
+      }
+
+      const data = await res.json();
+      setUnavailable(data.unavailable.map((t: string) => new Date(t)));
+    } catch (err) {
+      console.error("Failed to load unavailable slots", err);
+    }
+  };
+
+  fetchUnavailable();
+  }, [form.watch("primaryPhysician"), form.watch("schedule")]);
+
 
     const onSubmit = async (
     values: z.infer<typeof AppointmentFormValidation>
@@ -159,7 +189,9 @@ const AppointmentForm = ({
                 name="schedule"
                 label="Датум и време на термин"
                 showTimeSelect
-                dateFormat="dd/MM/yyyy - h:mm aa"
+                dateFormat="yyyy/MM/dd - h:mm aa"
+                minDate={new Date()}
+                excludeTimes={unavailable}  
               >
               </CustomFormField>
             
@@ -175,8 +207,8 @@ const AppointmentForm = ({
                 fieldType={FormFieldType.TEXTAREA}
                 control={form.control}
                 name="note"
-                label="Нота"
-                placeholder="Внеси нота (опционално)"
+                label="Белешка"
+                placeholder="Внеси белешка (опционално)"
               />
             </div>
 
@@ -199,4 +231,4 @@ const AppointmentForm = ({
     );      
 };
 
-export default AppointmentForm
+export default AppointmentForm;

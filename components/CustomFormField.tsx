@@ -20,6 +20,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import { Select, SelectContent, SelectTrigger, SelectValue } from "./ui/select"
 import { Textarea } from "./ui/textarea"
 import { Checkbox } from "./ui/checkbox"
+import { useEffect, useMemo, useState } from "react"
+import { getBookedSlotsForDay } from "@/lib/actions/appointment.actions"
 
 interface CustomProps{
     control: Control<any>,
@@ -33,6 +35,10 @@ interface CustomProps{
     dateFormat?: string,
     showTimeSelect?:boolean,
     children?: React.ReactNode,
+    minDate?: Date;
+    maxDate?: Date;
+    excludeDates?: Date[];
+    excludeTimes?: Date[]; 
     renderSkeleton?:(field:any) =>React.ReactNode
 }
 const RenderField = ({field, props}:{field:any; props:CustomProps}) => {
@@ -86,7 +92,7 @@ const RenderField = ({field, props}:{field:any; props:CustomProps}) => {
                 />
             </FormControl>
         )
-    case FormFieldType.DATE_PICKER:
+        case FormFieldType.DATE_PICKER:
         return(
             <div className="flex rounded-md border border-dark-500 bg-dark-400">
                 <Image 
@@ -97,16 +103,21 @@ const RenderField = ({field, props}:{field:any; props:CustomProps}) => {
                 className="ml-2"
                 />
                 <FormControl>
-                <DatePicker selected={field.value} 
+                <DatePicker 
+                selected={field.value} 
                 onChange={(date) => field.onChange(date)}
-                dateFormat={dateFormat ?? 'dd/MM/yyyy'}
+                dateFormat={dateFormat ?? 'yyyy/MM/dd'}
                 showTimeSelect={showTimeSelect ?? false}
                 timeInputLabel="Time: "
                 wrapperClassName="date-picker"
+                minDate={props.minDate}
+                maxDate={props.maxDate}
+                excludeDates={props.excludeDates}
+                excludeTimes={props.excludeTimes}
                 />
                 </FormControl>
-            </div>
-        )
+            </div>)
+        
     case FormFieldType.SKELETON:
         return (
             renderSkeleton ? renderSkeleton(field) : null

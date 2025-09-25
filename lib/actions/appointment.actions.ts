@@ -8,6 +8,7 @@ import { Appointment } from "@/types/appwrite.types";
 import {
   account,
   APPOINTMENT_TABLE_ID,
+      
   DATABASE_ID,
   databases,
   DOCTOR_TABLE_ID,
@@ -24,17 +25,38 @@ export const createAppointment = async (
   appointment: CreateAppointmentParams
 ) => {
   try {
+    // 🔒 1. Check if this doctor already has an appointment at the same time
+    const existing = await databases.listDocuments(
+      DATABASE_ID!,
+      APPOINTMENT_TABLE_ID!,
+      [
+        Query.equal("primaryPhysician", appointment.primaryPhysician),
+        Query.equal("schedule", new Date(appointment.schedule).toISOString()),
+        Query.contains("status", ["pending", "scheduled"]), // only active slots
+      ]
+    );
+
+    if (existing.documents.length > 0) {
+      throw new Error("This time slot is already booked.");
+    }
+
+    // 🆕 2. Create the appointment
     const newAppointment = await databases.createDocument(
       DATABASE_ID!,
       APPOINTMENT_TABLE_ID!,
       ID.unique(),
-      appointment
+      {
+        ...appointment,
+        schedule: new Date(appointment.schedule).toISOString(), // ensure ISO string
+      }
     );
 
     revalidatePath("/admin");
+
     return parseStringify(newAppointment);
   } catch (error) {
     console.error("An error occurred while creating a new appointment:", error);
+    throw error;
   }
 };
 
@@ -165,4 +187,24 @@ export const sendSMSNotification = async (userId:string, content:string) =>{
   }catch(error){
     console.log(error)
   }
+}
+//appointment picker
+export async function getBookedSlotsForDay(date: Date, doctor: string) {
+  const startOfDay = new Date(date);
+  startOfDay.setHours(0, 0, 0, 0);
+
+  const endOfDay = new Date(date);
+  endOfDay.setHours(23, 59, 59, 999);
+
+  const res = await databases.listDocuments(
+    DATABASE_ID!,
+    APPOINTMENT_TABLE_ID!,
+    [
+      Query.equal("primaryPhysician", doctor),
+      Query.greaterThanEqual("schedule", startOfDay.toISOString()),
+      Query.lessThanEqual("schedule", endOfDay.toISOString())
+    ]
+  );
+
+  return res.documents.map((doc) => new Date(doc.schedule));
 }
