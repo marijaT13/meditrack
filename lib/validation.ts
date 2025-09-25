@@ -61,6 +61,23 @@ export const PatientFormValidation = z.object({
   privacyConsent: z.boolean(),
 });
 
+export const ProfileFormValidation = z.object({
+  name: z.string().min(1, "Name is required").optional(),
+  email: z.string().email("Invalid email").optional(),
+  phone: z.string().min(7, "Phone is too short").optional(),
+  birthDate: z.union([z.date(), z.string()]).optional(),
+  address: z.string().optional(),
+  primaryPhysician: z.string().min(2, "Select at least one doctor"),
+  identificationNumber: z.string().optional(),
+  insuranceProvider: z
+    .string()
+    .min(2, "Insurance name must be at least 2 characters")
+    .max(50, "Insurance name must be at most 50 characters"),
+});
+
+
+export type ProfileFormValues = z.infer<typeof ProfileFormValidation>;
+
 export const CreateAppointmentSchema = z.object({
   primaryPhysician: z.string().min(2, "Select at least one doctor"),
   schedule: z.coerce.date(),

@@ -24,7 +24,6 @@ export type CreateUserParams = {
   email: string;
   phone: string;
 };
-
 export type RegisterUserParams = {
   email: string;
   phone: string;
@@ -194,38 +193,24 @@ export const getPatient = async (userId: string) => {
 };
 
  // ------------------ UPDATE PATIENT ------------------
-// export const updatePatient = async (documentId: string, data: any, file?: File) => {
-//   try {
-//     let fileId: string | undefined = data.identificationDocumentUrl;
+export const updatePatient = async (id: string, values: any) => {
+  try {
+    console.log("🟢 updatePatient called with:", { id, values });
 
-//     if (file) {
-//       const uploaded = await storage.createFile(
-//         NEXT_PUBLIC_BUCKET_ID!,
-//         ID.unique(),
-//         file
-//       );
-//       fileId = uploaded.$id;
-//     }
+    const updated = await databases.updateDocument(
+      DATABASE_ID!,
+      PATIENT_TABLE_ID!,
+      id,
+      values
+    );
 
-//     // Use the document ID (not userId)
-//     const updatedPatient = await databases.updateDocument(
-//       DATABASE_ID!,
-//       PATIENT_TABLE_ID!,
-//       documentId,
-//       {
-//         ...data,
-//         identificationDocumentUrl: fileId
-//           ? `${process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT}/storage/buckets/${NEXT_PUBLIC_BUCKET_ID}/files/${fileId}/view?project=${process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID}`
-//           : data.identificationDocumentUrl,
-//       }
-//     );
-
-//     return updatedPatient;
-//   } catch (err) {
-//     console.error("Error updating patient:", err);
-//     throw err; // let form catch it
-//   }
-// };
+    console.log("✅ Patient updated in Appwrite:", updated);
+    return updated;
+  } catch (error) {
+    console.error("❌ Appwrite updatePatient failed:", error);
+    throw error;
+  }
+};
 
 //send OTP via email
 export const sendOtp = async (email: string) => {
