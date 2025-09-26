@@ -6,8 +6,13 @@ Meditrack improves healthcare efficiency, reduces administrative workload, and e
 
 ### Technologies used:
 Next.js – Server-side rendering and fast performance.
+
 Appwrite – Authentication, database, and file storage. 
+
 TypeScript – Strongly typed, reliable code.
+
 TailwindCSS – Responsive and modern UI design.
+
 ShadCN – Elegant UI components. 
+
 Twilio – SMS notifications for appointment confirmation and reminders.
