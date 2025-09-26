@@ -208,3 +208,19 @@ export async function getBookedSlotsForDay(date: Date, doctor: string) {
 
   return res.documents.map((doc) => new Date(doc.schedule));
 }
+//get appointments by patient
+export async function getAppointmentsByPatient(userId: string) {
+  try {
+    const res = await databases.listDocuments(
+      DATABASE_ID!,
+      APPOINTMENT_TABLE_ID!,
+      [Query.equal("userId", userId)]
+    );
+
+    console.log("📌 getAppointmentsByPatient:", res.documents);
+    return res.documents;
+  } catch (error) {
+    console.error("❌ getAppointmentsByPatient failed:", error);
+    return [];
+  }
+}

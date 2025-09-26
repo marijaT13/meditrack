@@ -15,6 +15,8 @@ import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
+import { getAppointmentsByPatient } from "@/lib/actions/appointment.actions";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 export default function ProfilePage({ params }: { params: Promise<{ userId: string }> }) {
   const { userId } = use(params); // ✅ unwraps the Promise
@@ -23,6 +25,8 @@ export default function ProfilePage({ params }: { params: Promise<{ userId: stri
   const [patient, setPatient] = useState<any>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [appointments, setAppointments] = useState<any[]>([]);
+  const [loadingAppointments, setLoadingAppointments] = useState(true);
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(ProfileFormValidation),
@@ -45,9 +49,25 @@ export default function ProfilePage({ params }: { params: Promise<{ userId: stri
         console.error("❌ Failed to fetch patient:", err);
       }
     };
-
     loadPatient();
   }, [userId, form]);
+//appointments
+ useEffect(() => {
+  const loadAppointments = async () => {
+    try {
+      setLoadingAppointments(true);
+      const res = await getAppointmentsByPatient(userId);
+      console.log("📌 Loaded appointments for", userId, res);
+      setAppointments(res || []);
+    } catch (err) {
+      console.error("❌ Failed to fetch appointments:", err);
+    } finally {
+      setLoadingAppointments(false);
+    }
+  };
+  loadAppointments();
+}, [userId]);
+
 
   // Save patient
 const onSubmit = async (values: ProfileFormValues) => {
@@ -97,6 +117,16 @@ const onSubmit = async (values: ProfileFormValues) => {
     { name: "insuranceProvider", label: "Осигурување", type: FormFieldType.INPUT, placeholder: "Enter your provider" },
   ];
 
+    const upcomingAppointments = appointments.filter(
+      (a) => a.status === "scheduled"
+    );
+    const pendingAppointments = appointments.filter(
+      (a) => a.status === "pending"
+    );
+    const cancelledAppointments = appointments.filter(
+      (a) => a.status === "cancelled"
+    );
+
   return (
      <div className="remove-scrollbar mx-auto flex max-w-7xl flex-col space-y-14">
       {/* background circles */}
@@ -141,97 +171,195 @@ const onSubmit = async (values: ProfileFormValues) => {
           <p className="text-dark-700">{patient.email}</p>
           <p className="text-dark-700">{patient.phone}</p>
         </section>
+  
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full max-w-7xl">
+    {/* Profile card */}
+    <Card className="shadow-md rounded-2xl">
+      <CardHeader>
+        <CardTitle className="text-lg font-semibold">Профил</CardTitle>
+      </CardHeader>
+      <CardContent>
+        {!isEditing ? (
+          <div className="space-y-3">
+            <p><strong>Име и презиме:</strong> {patient.name}</p>
+            <p><strong>Е-меил:</strong> {patient.email}</p>
+            <p><strong>Телефонски број:</strong> {patient.phone}</p>
+            <p><strong>Дата на раѓање:</strong> {patient.birthDate ? new Date(patient.birthDate).toLocaleDateString() : "Not set"}</p>
+            <p><strong>Адреса на живеење:</strong> {patient.address}</p>
+            <p><strong>Пол:</strong> {patient.gender}</p>
+            <p><strong>Матичен лекар:</strong> {patient.primaryPhysician}</p>
+            <p><strong>Матичен број:</strong> {patient.identificationNumber}</p>
+            <p><strong>Осигурување:</strong> {patient.insuranceProvider}</p>
 
-        {/* profile edit card */}
-        <Card className="w-full max-w-2xl shadow-md rounded-2xl">
-          <CardHeader>
-            <CardTitle className="text-lg font-semibold">Профил</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {!isEditing ? (
-              <div className="space-y-3">
-                <p><strong>Име и презиме:</strong> {patient.name}</p>
-                <p><strong>Е-меил:</strong> {patient.email}</p>
-                <p><strong>Телефонски број:</strong> {patient.phone}</p>
-                <p><strong>Дата на раѓање:</strong> {patient.birthDate ? new Date(patient.birthDate).toLocaleDateString() : "Not set"}</p>
-                <p><strong>Адреса на живеење:</strong> {patient.address}</p>
-                <p><strong>Пол:</strong> {patient.gender}</p>
-                <p><strong>Матичен лекар:</strong> {patient.primaryPhysician}</p>
-                <p><strong>Матичен број:</strong> {patient.identificationNumber}</p>
-                <p><strong>Осигурување:</strong> {patient.insuranceProvider}</p>
-                
-                <div className="flex justify-between mt-4">
-                <Button
+            <div className="flex justify-between mt-4">
+              <Button
                 onClick={() => {
-                    form.reset({
+                  form.reset({
                     ...patient,
                     birthDate: patient.birthDate ? new Date(patient.birthDate) : undefined,
-                
-                });
-                    setIsEditing(true);
+                  });
+                  setIsEditing(true);
                 }}
-                className="shad-primary-btn mt-4"
-                >
+                className="shad-primary-btn"
+              >
                 Edit Profile
-                </Button>
-                 <Button
-                  variant="destructive"
-                  onClick={() => {
-                    // Fake session clear
-                    localStorage.removeItem("session"); 
-                    localStorage.removeItem("user");    
-                    
-                    // Redirect to home
-                    router.push("/");
-                  }}
-                  className="shad-danger-btn mt-4"
-                >
-                  Logout
-                </Button>
-                </div>
-              </div>
-            ) : (
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                  {fields.map((f) => (
-                    <CustomFormField
-                      key={f.name}
-                      fieldType={f.type}
-                      control={form.control}
-                      name={f.name as keyof ProfileFormValues}
-                      label={f.label}
-                      placeholder={f.placeholder}
-                    />
-                  ))}
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={() => {
+                  localStorage.removeItem("session");
+                  localStorage.removeItem("user");
+                  router.push("/");
+                }}
+                className="shad-danger-btn"
+              >
+                Logout
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              {fields.map((f) => (
+                <CustomFormField
+                  key={f.name}
+                  fieldType={f.type}
+                  control={form.control}
+                  name={f.name as keyof ProfileFormValues}
+                  label={f.label}
+                  placeholder={f.placeholder}
+                />
+              ))}
 
-                  <div className="flex gap-4">
-                    <Button
-                      type="submit"
-                      disabled={isSaving}
-                      className={`shad-primary-btn px-4 py-2 rounded ${isSaving ? "bg-gray-400" : "bg-blue-500 text-white"}`}
-                    >
-                      {isSaving ? "Saving..." : "Save Profile"}
-                    </Button>
-                    <Button
-                      type="button"
-                      onClick={() => {
-                        form.reset({
-                          ...patient,
-                          birthDate: patient.birthDate ? new Date(patient.birthDate) : undefined,
-                        });
-                        setIsEditing(false);
-                      }}
-                      className="shad-secondary-btn"
-                    >
-                      Cancel
-                    </Button>
-                  </div>
-                </form>
-              </Form>
-            )}
-          </CardContent>
-        </Card>
-      </main>
+              <div className="flex gap-4">
+                <Button
+                  type="submit"
+                  disabled={isSaving}
+                  className={`shad-primary-btn px-4 py-2 rounded ${isSaving ? "bg-gray-400" : "bg-blue-500 text-white"}`}
+                >
+                  {isSaving ? "Saving..." : "Save Profile"}
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => {
+                    form.reset({
+                      ...patient,
+                      birthDate: patient.birthDate ? new Date(patient.birthDate) : undefined,
+                    });
+                    setIsEditing(false);
+                  }}
+                  className="shad-secondary-btn"
+                >
+                  Cancel
+                </Button>
+              </div>
+            </form>
+          </Form>
+        )}
+      </CardContent>
+    </Card>
+      <div className="space-y-6">
+      {/* Upcoming */}
+      <Card className="shadow-md rounded-2xl">
+        <CardHeader>
+          <CardTitle className="text-lg font-semibold text-green-600">
+            Вашите термини
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Accordion type="single" collapsible className="w-full space-y-4">
+          {/* Upcoming */}
+      <AccordionItem value="upcoming">
+        <AccordionTrigger className="text-green-600 font-semibold">
+          Закажани термини
+        </AccordionTrigger>
+        <AccordionContent>
+          {upcomingAppointments.length > 0 ? (
+            <ul className="space-y-3">
+              {upcomingAppointments.map((appt) => (
+                <li
+                  key={appt.$id}
+                  className="p-3 border rounded-lg shadow-sm bg-green-600"
+                >
+                  <p className="font-medium">
+                    {new Date(appt.schedule).toLocaleString()}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    Со Др. {appt.primaryPhysician}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-gray-500">No upcoming appointments.</p>
+          )}
+        </AccordionContent>
+      </AccordionItem>
+      {/* Pending */}
+      <AccordionItem value="pending">
+        <AccordionTrigger className="text-yellow-600 font-semibold">
+          Термини во очекување
+        </AccordionTrigger>
+        <AccordionContent>
+          {pendingAppointments.length > 0 ? (
+            <ul className="space-y-3">
+              {pendingAppointments.map((appt) => (
+                <li
+                  key={appt.$id}
+                  className="p-3 border rounded-lg shadow-sm bg-yellow-600"
+                >
+                  <p className="font-medium">
+                   Барање за {new Date(appt.schedule).toLocaleString()}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    Со Др. {appt.primaryPhysician}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-gray-500">No pending requests.</p>
+          )}
+        </AccordionContent>
+      </AccordionItem>
+        {/* Cancelled */}
+      <AccordionItem value="cancelled">
+        <AccordionTrigger className="text-red-500 font-semibold">
+          Откажани термини
+        </AccordionTrigger>
+        <AccordionContent>
+          {cancelledAppointments.length > 0 ? (
+            <ul className="space-y-3">
+              {cancelledAppointments.map((appt) => (
+                <li
+                  key={appt.$id}
+                  className="p-3 border rounded-lg shadow-sm bg-red-600"
+                >
+                  <p className="font-medium">
+                    {new Date(appt.schedule).toLocaleString()}
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    Со Др. {appt.primaryPhysician}
+                  </p>
+                  {appt.cancellationReason && (
+                    <p className="text-xs text-red-700 mt-1">
+                      Причина: {appt.cancellationReason}
+                    </p>
+                  )}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-gray-500">No cancelled appointments.</p>
+          )}
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
+        </CardContent>
+      </Card>
+    </div>
+  </div>
+</main>
     </div>
   );
 }
