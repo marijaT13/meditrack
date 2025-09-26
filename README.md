@@ -1,6 +1,7 @@
 ### Meditrack
 Meditrack is an intuitive platform designed to simplify patient registration, appointment scheduling, and medical record management. It enables seamless coordination between patients and healthcare providers with real-time updates and automated SMS notifications.
-Built with Next.js, the system provides a scalable, secure, and feature-rich solution for modern healthcare facilities.
+
+This application is the result of my undergraduate final project, emphasizing intuitive design in healthcare solutions.
 
 Meditrack improves healthcare efficiency, reduces administrative workload, and enhances the patient experience. With a strong focus on intuitive and modern design, its automated notifications, user-friendly interface, and real-time data handling make it an innovative solution for clinics, hospitals, and telemedicine services.
 
