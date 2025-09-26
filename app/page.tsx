@@ -71,7 +71,7 @@ export default function Home() {
       <UserOtpModal
         userId={otpUser.userId}
         email={otpUser.email}
-        redirectTo="/new-appointment" // this will become /patients/[id]/new-appointment
+        redirectTo="/profile" // this will become /patients/[id]/new-appointment
         onClose={() => {
           setOtpModalOpen(false);
           setOtpUser(null);

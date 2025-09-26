@@ -1,6 +1,8 @@
 import AppointmentForm from "@/components/forms/AppointmentForm";
 import { getPatient } from "@/lib/actions/patient.actions";
 import Image from "next/image";
+import Link from "next/link";
+import router from "next/navigation";
 
 export default async function Appointment(props: SearchParamProps) {
   const params = await props.params;
@@ -24,9 +26,12 @@ export default async function Appointment(props: SearchParamProps) {
             userId={userId}
             patientId={patient?.$id}
           />
-          <p className="text-center text-sm text-gray-500 mt-4">
+          <div className="flex justify-between items-center mt-4 text-sm text-gray-500">
+          <p className="copyright">
             ©2025 МediTrack
           </p>
+          <Link href={`/patients/${userId}/profile`} className="text-green-600 hover:underline font-semibold">Профил</Link>
+        </div>
         </div>
       </section>
 

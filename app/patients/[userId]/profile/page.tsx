@@ -14,10 +14,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-
+import { useRouter } from "next/navigation";
 
 export default function ProfilePage({ params }: { params: Promise<{ userId: string }> }) {
   const { userId } = use(params); // ✅ unwraps the Promise
+  const router = useRouter();
 
   const [patient, setPatient] = useState<any>(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -113,6 +114,17 @@ const onSubmit = async (values: ProfileFormValues) => {
             className="h-8 w-fit"
           />
         </Link>
+        <Button>
+          <Link href={`/patients/${userId}/new-appointment`}>
+            <Image
+            src="/assets/icons/add-appointment.svg"
+            alt="schedule appointment"
+            height={32}
+            width={32}
+            />
+        </Link>
+       </Button>
+       
       </header>
 
       {/* main content */}
@@ -147,7 +159,8 @@ const onSubmit = async (values: ProfileFormValues) => {
                 <p><strong>Матичен лекар:</strong> {patient.primaryPhysician}</p>
                 <p><strong>Матичен број:</strong> {patient.identificationNumber}</p>
                 <p><strong>Осигурување:</strong> {patient.insuranceProvider}</p>
-
+                
+                <div className="flex justify-between mt-4">
                 <Button
                 onClick={() => {
                     form.reset({
@@ -161,7 +174,21 @@ const onSubmit = async (values: ProfileFormValues) => {
                 >
                 Edit Profile
                 </Button>
-
+                 <Button
+                  variant="destructive"
+                  onClick={() => {
+                    // Fake session clear
+                    localStorage.removeItem("session"); 
+                    localStorage.removeItem("user");    
+                    
+                    // Redirect to home
+                    router.push("/");
+                  }}
+                  className="shad-danger-btn mt-4"
+                >
+                  Logout
+                </Button>
+                </div>
               </div>
             ) : (
               <Form {...form}>
