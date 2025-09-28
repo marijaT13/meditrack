@@ -49,7 +49,7 @@ const RegisterForm = ({ user }: { user: any }) => {
     );
     try {
       const newPatient = await registerPatient({ ...values, userId: user.$id });
-      if (!newPatient) throw new Error("Patient registration failed");
+      if (!newPatient) throw new Error("Неуспешна регистрација.");
       
       router.push(`/patients/${user.$id}/new-appointment`);
     } catch (error) {

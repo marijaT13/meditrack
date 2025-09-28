@@ -11,7 +11,7 @@ export async function GET(req: Request) {
 
   if (!doctorId || !date) {
     return NextResponse.json(
-      { error: "Missing doctor or date" },
+      { error: "Внеси име на доктор или датум за термин." },
       { status: 400 }
     );
   }

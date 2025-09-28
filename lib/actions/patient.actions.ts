@@ -195,7 +195,7 @@ export const getPatient = async (userId: string) => {
  // ------------------ UPDATE PATIENT ------------------
 export const updatePatient = async (id: string, values: any) => {
   try {
-    console.log("🟢 updatePatient called with:", { id, values });
+    console.log("updatePatient called with:", { id, values });
 
     const updated = await databases.updateDocument(
       DATABASE_ID!,
@@ -207,7 +207,7 @@ export const updatePatient = async (id: string, values: any) => {
     console.log("✅ Patient updated in Appwrite:", updated);
     return updated;
   } catch (error) {
-    console.error("❌ Appwrite updatePatient failed:", error);
+    console.error("Appwrite updatePatient failed:", error);
     throw error;
   }
 };
@@ -218,7 +218,7 @@ export const sendOtp = async (email: string) => {
     const token = await account.createEmailToken(ID.unique(), email);
     return token; // contains userId, expire time
   } catch (error: any) {
-    throw new Error(`Error sending OTP: ${error?.message || error}`);
+    throw new Error(`Грешка при праќање на код: ${error?.message || error}`);
   }
 };
 export const verifyOtp = async (userId: string, otp: string) => {
@@ -226,6 +226,6 @@ export const verifyOtp = async (userId: string, otp: string) => {
     const session = await account.createSession(userId, otp);
     return session;
   } catch (error: any) {
-    throw new Error(`Error verifying OTP: ${error?.message || error}`);
+    throw new Error(`Грешка при верификација на код: ${error?.message || error}`);
   }
 };

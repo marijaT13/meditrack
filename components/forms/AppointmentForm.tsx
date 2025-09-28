@@ -135,7 +135,7 @@ const AppointmentForm = ({
       }
     } catch (error) {
       console.error("Failed to create appointment:", error);
-      alert("Could not create appointment. Please try again.");
+      alert("Не може да се закаже термин, обидете се повторно");
     }
     setIsLoading(false);
   }

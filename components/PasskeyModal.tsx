@@ -38,7 +38,7 @@ export const PasskeyModal = ({ redirectTo = "/doctors", onClose }: PasskeyModalP
       if (onClose) onClose();
       router.push(redirectTo);
     } else {
-      setError("Invalid passkey. Please try again.");
+      setError("Кодот кој го внесивте не е валиден. Пробајте повторно.");
     }
   };
 
@@ -52,7 +52,7 @@ export const PasskeyModal = ({ redirectTo = "/doctors", onClose }: PasskeyModalP
       <AlertDialogContent className="shad-alert-dialog">
         <AlertDialogHeader>
           <AlertDialogTitle className="flex items-start justify-between">
-            Администраторски пристап
+            Докторски пристап
             <Image
               src="/assets/icons/close.svg"
               alt="close"
@@ -63,7 +63,7 @@ export const PasskeyModal = ({ redirectTo = "/doctors", onClose }: PasskeyModalP
             />
           </AlertDialogTitle>
           <AlertDialogDescription>
-            За влез во администраторскиот панел, внесете го вашиот код.
+            За влез во докторскиот панел, внесете го вашиот код.
           </AlertDialogDescription>
         </AlertDialogHeader>
 

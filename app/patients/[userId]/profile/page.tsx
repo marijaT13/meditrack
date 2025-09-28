@@ -46,7 +46,7 @@ export default function ProfilePage({ params }: { params: Promise<{ userId: stri
           });
         }
       } catch (err) {
-        console.error("❌ Failed to fetch patient:", err);
+        console.error("Failed to fetch patient:", err);
       }
     };
     loadPatient();
@@ -57,10 +57,10 @@ export default function ProfilePage({ params }: { params: Promise<{ userId: stri
     try {
       setLoadingAppointments(true);
       const res = await getAppointmentsByPatient(userId);
-      console.log("📌 Loaded appointments for", userId, res);
+      console.log("Loaded appointments for", userId, res);
       setAppointments(res || []);
     } catch (err) {
-      console.error("❌ Failed to fetch appointments:", err);
+      console.error("Failed to fetch appointments:", err);
     } finally {
       setLoadingAppointments(false);
     }
@@ -92,7 +92,7 @@ const onSubmit = async (values: ProfileFormValues) => {
     setIsEditing(false);
     alert("Profile updated!");
   } catch (err) {
-    console.error("❌ Failed to update:", err);
+    console.error("Failed to update:", err);
     alert("Something went wrong.");
   } finally {
     setIsSaving(false);
@@ -291,14 +291,14 @@ const onSubmit = async (values: ProfileFormValues) => {
               ))}
             </ul>
           ) : (
-            <p className="text-gray-500">No upcoming appointments.</p>
+            <p className="text-gray-500">Немате закажани термини.</p>
           )}
         </AccordionContent>
       </AccordionItem>
       {/* Pending */}
       <AccordionItem value="pending">
         <AccordionTrigger className="text-yellow-600 font-semibold">
-          Термини во очекување
+          Термини во исчекување
         </AccordionTrigger>
         <AccordionContent>
           {pendingAppointments.length > 0 ? (
@@ -318,7 +318,7 @@ const onSubmit = async (values: ProfileFormValues) => {
               ))}
             </ul>
           ) : (
-            <p className="text-gray-500">No pending requests.</p>
+            <p className="text-gray-500">Немате термини во исчекување. </p>
           )}
         </AccordionContent>
       </AccordionItem>
@@ -350,7 +350,7 @@ const onSubmit = async (values: ProfileFormValues) => {
               ))}
             </ul>
           ) : (
-            <p className="text-gray-500">No cancelled appointments.</p>
+            <p className="text-gray-500">Немате откажани термини.</p>
           )}
         </AccordionContent>
       </AccordionItem>
@@ -360,6 +360,6 @@ const onSubmit = async (values: ProfileFormValues) => {
     </div>
   </div>
 </main>
-    </div>
+</div>
   );
 }

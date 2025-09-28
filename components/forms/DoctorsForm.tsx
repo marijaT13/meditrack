@@ -49,7 +49,7 @@ const DoctorForm = () => {
 
  const onSubmit = form.handleSubmit(async (values) => {
   if (!adminVerified) {
-    setError("You must enter the admin passkey first.");
+    setError("Мора да внесете верификациски код.");
     return;
   }
 
@@ -61,14 +61,14 @@ const DoctorForm = () => {
     const doctor = await checkDoctorExists(values.email);
 
     if (!doctor) {
-      setError("You are not registered as a doctor.");
+      setError("Вие не сте регистрирани како доктор.");
       return;
     }
     localStorage.setItem("doctorId", doctor.$id);
     router.push(`/doctors/${doctor.$id}/profile`)
   } catch (err) {
     console.error(err);
-    setError("Invalid credentials or failed login.");
+    setError("Невалидни акредитив. Обидете се повторно.");
   } finally {
     setIsLoading(false);
   }
@@ -77,7 +77,7 @@ const DoctorForm = () => {
   if (!adminVerified) {
     return (
       <p className="text-red-500 text-center mt-8">
-        Access denied. Please enter the admin passkey first.
+        Забранет пристап. Ве молиме внесете го верификацискиот код.
       </p>
     );
   }

@@ -53,7 +53,7 @@ export default function Home() {
               className="text-green-600 hover:underline font-semibold"
               onClick={() => setShowPasskey(true)}
             >
-              Администратор
+              Доктор
             </button>
           </div>
         </div>

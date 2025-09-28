@@ -39,7 +39,7 @@ const DoctorProfilePage = async ({ params }: Props) => {
         );
         return { ...appt, patient };
       } catch (err) {
-        console.error("Missing patient for appointment", appt.patient);
+        console.error("Не постои пациент со закажан термин.", appt.patient);
         return { ...appt, patient: null };
       }
     })

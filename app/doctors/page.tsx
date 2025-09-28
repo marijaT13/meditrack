@@ -29,7 +29,7 @@ export default function DoctorsPage() {
             className="mb-4 "
           />
           <p className="text-dark-700">
-           Здраво докторе. Најавете се тука.
+           Најавете се тука.
           </p>
 
           <DoctorsForm />

@@ -144,12 +144,12 @@ export const updateAppointment = async ({
         appointment
       );
       if (!updatedAppointment){
-        throw new Error("Appointment not found");
+        throw new Error("Терминот не постои.");
       }
       const smsMessage = `
-      Hi, it is MediTrack. 
-      ${type ==='schedule' ? `Your appointment is scheduled for ${formatDateTime(appointment.schedule!).dateTime } with Др.${appointment.primaryPhysician}. Please be on time.`
-      :`We regret to inform you that your appointment has been cancelled for the following reason: ${appointment.cancellationReason}`
+      Здраво ${appointment.patient.name} 
+      ${type ==='schedule' ? `Вашиот термин е закажан за ${formatDateTime(appointment.schedule!).dateTime } со Др. ${appointment.primaryPhysician}. Ве молиме бидете точни.`
+      :`Вашиот термин е откажан бидејќи: ${appointment.cancellationReason}`
       }
       `
       await sendSMSNotification(userId, smsMessage);
@@ -217,10 +217,10 @@ export async function getAppointmentsByPatient(userId: string) {
       [Query.equal("userId", userId)]
     );
 
-    console.log("📌 getAppointmentsByPatient:", res.documents);
+    console.log("getAppointmentsByPatient:", res.documents);
     return res.documents;
   } catch (error) {
-    console.error("❌ getAppointmentsByPatient failed:", error);
+    console.error("getAppointmentsByPatient failed:", error);
     return [];
   }
 }
