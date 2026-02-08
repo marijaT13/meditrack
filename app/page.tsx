@@ -25,7 +25,7 @@ export default function Home() {
 
       
       <section className="flex w-full md:w-1/2 items-center justify-center p-6">
-        <div className="absolute -top-32 -right-32 w-[600px] h-[850px] bg-red-500 rotate-45  -z-10" style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }}></div>
+        <div className="absolute -top-30 -right-32 w-[640px] h-[900px] bg-red-500 rotate-45 -z-10" style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }}></div>
 
         <div className="max-w-[400px] w-full space-y-6">
           <Image
@@ -36,7 +36,7 @@ export default function Home() {
             className="mb-4"
           />
 
-          <p className="text-dark-700 ">
+          <p className="text-gray-800 ">
             Добредојде на MediTrack. Започни тука.
           </p>
 
@@ -47,10 +47,10 @@ export default function Home() {
           }}
           />
 
-          <div className="flex justify-between items-center mt-4 text-sm text-gray-500">
-            <p>©2025 MediTrack</p>
+          <div className="flex justify-between items-center mt-4 text-sm text-gray-800">
+            <p>©{new Date().getFullYear()} MediTrack</p>
             <button
-              className="text-green-600 hover:underline font-semibold"
+              className="text-green-400 hover:underline font-semibold"
               onClick={() => setShowPasskey(true)}
             >
               Доктор

@@ -1,12 +1,11 @@
 import AppointmentForm from "@/components/forms/AppointmentForm";
 import { getPatient } from "@/lib/actions/patient.actions";
+import { SearchParamProps } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
-import router from "next/navigation";
 
-export default async function Appointment(props: SearchParamProps) {
-  const params = await props.params;
-  const { userId } = params;
+export default async function Appointment({ params }: SearchParamProps<"userId">) {
+  const { userId } = await params;
   const patient = await getPatient(userId);
 
   return (

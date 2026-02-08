@@ -4,12 +4,14 @@ import { redirect } from "next/navigation";
 import RegisterForm from "@/components/forms/RegisterForm";
 import { getPatient, getUser } from "@/lib/actions/patient.actions";
 
-type SearchParamProps = {
-  params: { userId: string };
+type PageProps = {
+ params: Promise<{
+    userId: string;
+  }>;
 };
 
-const RegisterPage = async ({ params }: SearchParamProps) => {
-  const userId = params.userId;
+export default async function RegisterPage({ params }: PageProps) {
+  const { userId } = await params;
 
   // Validate userId length to avoid Appwrite errors
   if (!userId || userId.length > 36) {
@@ -60,4 +62,3 @@ const RegisterPage = async ({ params }: SearchParamProps) => {
   );
 };
 
-export default RegisterPage;

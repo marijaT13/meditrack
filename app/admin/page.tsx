@@ -13,7 +13,6 @@ const AdminPage = async () => {
   return (
     <div className="mx-auto flex max-w-7xl flex-col space-y-14">
         <div className="absolute -top-32 -left-32 w-[550px] h-[550px] bg-red-600 rounded-full -z-10"></div>
-
         <header className="admin-header">
         <Link href="/" className="cursor-pointer">
           <Image

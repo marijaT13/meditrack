@@ -19,7 +19,7 @@ import { getAppointmentsByPatient } from "@/lib/actions/appointment.actions";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 export default function ProfilePage({ params }: { params: Promise<{ userId: string }> }) {
-  const { userId } = use(params); // ✅ unwraps the Promise
+  const { userId } = use(params);
   const router = useRouter();
 
   const [patient, setPatient] = useState<any>(null);
@@ -35,22 +35,24 @@ export default function ProfilePage({ params }: { params: Promise<{ userId: stri
 
   // Load patient once
    useEffect(() => {
-    const loadPatient = async () => {
-      try {
-        const data = await getPatient(userId);
-        if (data) {
-          setPatient(data);
-          form.reset({
-            ...patient,
-            birthDate: data.birthDate ? new Date(data.birthDate) : undefined,
-          });
-        }
-      } catch (err) {
-        console.error("Failed to fetch patient:", err);
+  const loadPatient = async () => {
+    try {
+      const data = await getPatient(userId);
+      if (data) {
+        setPatient(data);
+        form.reset({
+          ...data,
+          birthDate: data.birthDate ? new Date(data.birthDate) : undefined,
+        });
       }
-    };
-    loadPatient();
-  }, [userId, form]);
+    } catch (err) {
+      console.error("Failed to fetch patient:", err);
+    }
+  };
+
+  loadPatient();
+}, [userId, form]);
+
 //appointments
  useEffect(() => {
   const loadAppointments = async () => {
@@ -224,7 +226,7 @@ const onSubmit = async (values: ProfileFormValues) => {
                 <CustomFormField
                   key={f.name}
                   fieldType={f.type}
-                  control={form.control}
+                  form={form}
                   name={f.name as keyof ProfileFormValues}
                   label={f.label}
                   placeholder={f.placeholder}

@@ -63,7 +63,7 @@ const PatientForm = ({ onExistingUser }: { onExistingUser?: (user: { userId: str
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 w-full  mx-auto">
         <CustomFormField
           fieldType={FormFieldType.INPUT}
-          control={form.control}
+          form={form}
           name="name"
           label="Целосно име и презиме"
           placeholder="Marija Tashevska"
@@ -71,14 +71,14 @@ const PatientForm = ({ onExistingUser }: { onExistingUser?: (user: { userId: str
         />
         <CustomFormField
           fieldType={FormFieldType.INPUT}
-          control={form.control}
+          form={form}
           name="email"
           label="Е-пошта"
           placeholder="tashevska.marija@uklo.edu.mk"
         />
         <CustomFormField
           fieldType={FormFieldType.PHONE_INPUT}
-          control={form.control}
+          form={form}
           name="phone"
           label="Телефонски број"
           placeholder="(389)70123456"

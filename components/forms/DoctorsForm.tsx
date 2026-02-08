@@ -17,10 +17,14 @@ import z from "zod";
 
 const DoctorLoginValidation = z.object({
   email: z.string().email("Внесете валидна е-пошта"),
+  name: z.string().optional(),
+  phone: z.string().optional(),
 });
 
 interface DoctorFormValues {
   email: string;
+  name?: string;
+  phone?: string;
 }
 
 const DoctorForm = () => {
@@ -31,7 +35,7 @@ const DoctorForm = () => {
 
   const form = useForm<DoctorFormValues>({
     resolver: zodResolver(DoctorLoginValidation),
-    defaultValues: { email: ""},
+    defaultValues: { email: "", name: undefined, phone: undefined},
   });
 
   // ✅ Check if admin passkey is verified
@@ -85,23 +89,16 @@ const DoctorForm = () => {
   return (
     <Form {...form}>
       <form onSubmit={onSubmit} className="space-y-6 flex-1">
-        <CustomFormField
-          fieldType={FormFieldType.INPUT}
-          control={form.control}
-          name="name"
-          label="Име и презиме"
-          placeholder="Живко Попов"
-        />
-        <CustomFormField
-          fieldType={FormFieldType.INPUT}
-          control={form.control}
-          name="email"
-          label="Е-пошта"
-          placeholder="doctor@example.com"
-        />
-        <CustomFormField
+        <CustomFormField<DoctorFormValues>
+          form={form}
+        name="email"
+        fieldType={FormFieldType.INPUT}
+        label="Email"
+        placeholder="doctor@email.com"
+      />
+        <CustomFormField<DoctorFormValues>
+        form={form}
           fieldType={FormFieldType.PHONE_INPUT}
-          control={form.control}
           name="phone"
           label=" Телефонски број"
           placeholder="(389)70123456"

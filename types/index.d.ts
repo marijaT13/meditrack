@@ -1,7 +1,7 @@
 
-type SearchParamProps<T extends string = string> = {
-  params: Record<T, string>; // dynamic route params
-  searchParams: { [key: string]: string | string[] | undefined }; // query string (?key=value)
+export type SearchParamProps<T extends string = string> = {
+  params: Promise<Record<T, string>>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
   declare type Gender = "Male" | "Female" | "Other";
   declare type Status = "pending" | "scheduled" | "cancelled";

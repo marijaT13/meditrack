@@ -1,22 +1,24 @@
 
 import LogoutButton from "@/components/LogoutButton";
-import StatCard from "@/components/StatCard";
-import { DataTable } from "@/components/table/DataTable";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { databases, DATABASE_ID, DOCTOR_TABLE_ID, NEXT_PUBLIC_BUCKET_ID, NEXT_PUBLIC_APPWRITE_PROJECT_ID, APPOINTMENT_TABLE_ID, PATIENT_TABLE_ID, account } from "@/lib/appwrite.config";
+import { databases, DATABASE_ID, DOCTOR_TABLE_ID, APPOINTMENT_TABLE_ID, PATIENT_TABLE_ID } from "@/lib/appwrite.config";
 import Image from "next/image";
 import Link from "next/link";
-
+import { Models } from "appwrite";
 import { Query } from "node-appwrite";
 
 interface Props {
-  params: { id: string };
+  params: Promise<{
+    id: string;
+  }>;
+
 }
 
 const DoctorProfilePage = async ({ params }: Props) => {
-  const doctorId = params.id;
+  const { id: doctorId } = await params;
+
   // Fetch doctor document
   const doctor = await databases.getDocument(
     DATABASE_ID!,
@@ -28,22 +30,36 @@ const DoctorProfilePage = async ({ params }: Props) => {
      APPOINTMENT_TABLE_ID!, // your appointments collection
      [Query.equal("primaryPhysician", doctor.name)]
    );
+
+   type AppointmentDocument = Models.Document & {
+  patient?: string; // patient ID stored in appointment
+};
+
+type AppointmentWithPatient = Models.Document & {
+  patient: Models.Document | null;
+};
     // Fetch related patients
-  const appointmentsWithPatients = await Promise.all(
-    appointments.documents.map(async (appt: any) => {
-      try {
-        const patient = await databases.getDocument(
-          DATABASE_ID!,
-          PATIENT_TABLE_ID!,
-          appt.patient // must exist in appointment doc
-        );
-        return { ...appt, patient };
-      } catch (err) {
-        console.error("Не постои пациент со закажан термин.", appt.patient);
+ const appointmentsWithPatients: AppointmentWithPatient[] = await Promise.all(
+  (appointments.documents as AppointmentDocument[]).map(async (appt) => {
+    try {
+      if (!appt.patient) {
         return { ...appt, patient: null };
       }
-    })
-  );
+
+      const patient = await databases.getDocument(
+        DATABASE_ID!,
+        PATIENT_TABLE_ID!,
+        appt.patient 
+      );
+
+      return { ...appt, patient };
+    } catch (err: unknown) {
+      console.error("Не постои пациент со закажан термин.", appt.patient);
+      return { ...appt, patient: null };
+    }
+  })
+);
+
   
   return (
     <div className="remove-scrollbar mx-auto flex max-w-7xl flex-col space-y-14">

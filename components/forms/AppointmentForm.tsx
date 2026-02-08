@@ -1,15 +1,12 @@
 "use client"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { SubmitHandler, useForm } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { Button } from "@/components/ui/button"
 import { Form } from "@/components/ui/form"
 import CustomFormField from "../CustomFormField"
 import SubmitButton from "../ui/SubmitButton"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { createUser } from "@/lib/actions/patient.actions"
-import { create } from "node:domain"
 import { Doctors } from "@/constants"
 import { SelectItem } from "../ui/select"
 import Image from "next/image"
@@ -17,6 +14,7 @@ import { FormFieldType } from "./PatientForm"
 import { createAppointment, updateAppointment } from "@/lib/actions/appointment.actions"
 import { getAppointmentSchema } from "@/lib/validation"
 import { Appointment } from "@/types/appwrite.types"
+import { Status } from "@/types"
 
 const AppointmentForm = ({
   userId,
@@ -26,7 +24,7 @@ const AppointmentForm = ({
   setOpen
   
 }: {userId:string;
-    patientId: string;
+    patientId?: string;
     type: "create" | "schedule" | "cancel";
     appointment?: Appointment;
     setOpen?: Dispatch<SetStateAction<boolean>>;
@@ -36,36 +34,32 @@ const AppointmentForm = ({
     const [isLoading, setIsLoading] = useState(false);
     const [unavailable, setUnavailable] = useState<Date[]>([]);
 
-    const  AppointmentFormValidation = getAppointmentSchema(type);
+const AppointmentFormValidation = getAppointmentSchema(type) as z.ZodTypeAny;
         
     const form = useForm<z.infer<typeof AppointmentFormValidation>>({
-            resolver: zodResolver(AppointmentFormValidation),
-            defaultValues: {
-            primaryPhysician: appointment ? appointment.primaryPhysician : " ",
-            schedule: appointment ? new Date(appointment.schedule) : new Date(),
-            reason: appointment ? appointment.reason : "",
-            note: appointment ? appointment.note : "",
-            cancellationReason: "", 
-            },
-        });
+  resolver: zodResolver(AppointmentFormValidation),
+  defaultValues: {
+    primaryPhysician: appointment?.primaryPhysician ?? "",
+    schedule: appointment ? new Date(appointment.schedule) : new Date(),
+    reason: appointment?.reason ?? "",
+    note: appointment?.note ?? "",
+    cancellationReason: "",
+  },
+});
 
+const primaryPhysician = form.watch("primaryPhysician");
+const schedule = form.watch("schedule");
   useEffect(() => {
   const fetchUnavailable = async () => {
-    const doctor = form.watch("primaryPhysician");
-    const schedule = form.watch("schedule"); // user-picked date
-
-    if (!doctor || !schedule) return;
+    if (!primaryPhysician || !schedule) return;
 
     try {
-      const day = new Date(schedule).toISOString().split("T")[0]; // YYYY-MM-DD
+      const day = new Date(schedule).toISOString().split("T")[0];
       const res = await fetch(
-        `/api/appointments/unavailable?doctor=${doctor}&date=${day}`
+        `/api/appointments/unavailable?doctor=${primaryPhysician}&date=${day}`
       );
 
-      if (!res.ok) {
-        console.error("API error:", res.status, await res.text());
-        return;
-      }
+      if (!res.ok) return;
 
       const data = await res.json();
       setUnavailable(data.unavailable.map((t: string) => new Date(t)));
@@ -75,7 +69,7 @@ const AppointmentForm = ({
   };
 
   fetchUnavailable();
-  }, [form.watch("primaryPhysician"), form.watch("schedule")]);
+}, [primaryPhysician, schedule]);
 
 
     const onSubmit = async (
@@ -83,17 +77,13 @@ const AppointmentForm = ({
   ) => {
     setIsLoading(true);
 
-     let status;
-     switch(type){
-      case 'schedule':
-        status='scheduled';
-        break;
-      case 'cancel':
-        status='cancelled';
-        break;
-      default:
-        status='pending';
-     }
+     const status: Status =
+  type === "schedule"
+    ? "scheduled"
+    : type === "cancel"
+    ? "cancelled"
+    : "pending";
+
      
      try {
       if (type === 'create' && patientId) {
@@ -104,7 +94,7 @@ const AppointmentForm = ({
           primaryPhysician: values.primaryPhysician,
           schedule: new Date(values.schedule),
           reason: values.reason!,
-          status: status as Status,
+          status: status,
           note: values.note,
         }
         const appointment = await createAppointment(appointmentData);
@@ -115,14 +105,17 @@ const AppointmentForm = ({
         }
       }else{
         console.log("Updating appointment with values:", values);
+        if (!appointment?.$id) {
+        throw new Error("Appointment ID is missing");
+      }
         const appointmentToUpdate = {
           userId,
-          appointmentId:appointment?.$id!,
+          appointmentId: appointment.$id,
           appointment:{
             primaryPhysician: values?.primaryPhysician,
             schedule: new Date(values?.schedule),
             status: status as Status,
-            cancellationReason: values?.cancellationReason!,
+            cancellationReason: values.cancellationReason ?? "",
           },
           type,
           timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
@@ -163,7 +156,7 @@ const AppointmentForm = ({
           <>
           <CustomFormField
             fieldType={FormFieldType.SELECT}
-            control={form.control}
+            form={form}
             name="primaryPhysician"
             label="Доктор"
             placeholder="Select a doctor"
@@ -185,27 +178,27 @@ const AppointmentForm = ({
           </CustomFormField>
               <CustomFormField
                 fieldType={FormFieldType.DATE_PICKER}
-                control={form.control}
+                form={form}
                 name="schedule"
                 label="Датум и време на термин"
                 showTimeSelect
                 dateFormat="yyyy/MM/dd - h:mm aa"
                 minDate={new Date()}
-                excludeTimes={unavailable}  
+                excludeTimes={unavailable ?? []}  
               >
               </CustomFormField>
             
             <div className="flex flex-col gap-6 xl:flex-row">
               <CustomFormField
                 fieldType={FormFieldType.TEXTAREA}
-                control={form.control}
+                form={form}
                 name="reason"
                 label="Причина за термин"
                 placeholder="Внеси причина за барање на термин"
               />
               <CustomFormField
                 fieldType={FormFieldType.TEXTAREA}
-                control={form.control}
+                form={form}
                 name="note"
                 label="Белешка"
                 placeholder="Внеси белешка (опционално)"
@@ -217,7 +210,7 @@ const AppointmentForm = ({
         {type === "cancel" &&(
           <CustomFormField
             fieldType={FormFieldType.TEXTAREA}
-            control={form.control}
+            form={form}
             name="cancellationReason"
             label="Причина за откажување"
             placeholder="Внеси причина за откажување"

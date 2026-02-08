@@ -3,22 +3,17 @@
 import { revalidatePath } from "next/cache";
 import { ID, Query } from "node-appwrite";
 
-import { Appointment } from "@/types/appwrite.types";
 
 import {
-  account,
   APPOINTMENT_TABLE_ID,
       
   DATABASE_ID,
   databases,
-  DOCTOR_TABLE_ID,
   messaging,
   PATIENT_TABLE_ID,
 } from "../appwrite.config";
 import { formatDateTime, parseStringify } from "../utils";
-import { parse } from "path";
-import { Doctors } from "@/constants";
-import { Account } from "appwrite";
+import { CreateAppointmentParams, UpdateAppointmentParams } from "@/types";
 
 //  CREATE APPOINTMENT
 export const createAppointment = async (
