@@ -36,7 +36,7 @@ export default function Home() {
             className="mb-4"
           />
 
-          <p className="text-gray-800 ">
+          <p className="text-gray-800">
             Добредојде на MediTrack. Започни тука.
           </p>
 

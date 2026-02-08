@@ -66,7 +66,7 @@ const RenderField = <T extends FieldValues>({
   switch (fieldType) {
     case FormFieldType.INPUT:
       return (
-        <div className="flex rounded-md border border-dark-500 bg-dark-400">
+        <div className="flex rounded-md border text-white border-dark-500 bg-white">
           {iconSrc && (
             <Image
               src={iconSrc}
@@ -80,7 +80,7 @@ const RenderField = <T extends FieldValues>({
             <Input
               placeholder={placeholder}
               {...field}
-              className="shad-input border-0"
+              className="shad-input border-0 text-white"
             />
           </FormControl>
         </div>
@@ -89,7 +89,7 @@ const RenderField = <T extends FieldValues>({
     case FormFieldType.TEXTAREA:
       return (
         <FormControl>
-          <Textarea {...field} placeholder={placeholder} className="shad-textarea" />
+          <Textarea {...field} placeholder={placeholder} className="shad-textarea bg-white text-white" />
         </FormControl>
       );
 
@@ -103,14 +103,14 @@ const RenderField = <T extends FieldValues>({
             value={field.value}
             onChange={field.onChange}
             placeholder={placeholder}
-            className="input-phone bg-white"
+            className="input-phone text-white bg-white"
           />
         </FormControl>
       );
 
     case FormFieldType.DATE_PICKER:
       return (
-        <div className="flex rounded-md border border-dark-500 bg-dark-400">
+        <div className="flex rounded-md border border-dark-500 bg-white">
           <Image
             src="/assets/icons/calendar.svg"
             height={20}
@@ -141,7 +141,7 @@ const RenderField = <T extends FieldValues>({
             <SelectTrigger className="shad-select-trigger">
               <SelectValue placeholder={placeholder} />
             </SelectTrigger>
-            <SelectContent className="shad-select-content">
+            <SelectContent className="shad-select-content text-black">
               {props.children}
             </SelectContent>
           </Select>
@@ -172,7 +172,7 @@ const CustomFormField = <T extends FieldValues>(
       control={form.control}
       name={name}
       render={({ field }) => (
-        <FormItem className="w-full flex-1">
+        <FormItem className="w-full flex-1 ">
           {fieldType !== FormFieldType.CHECKBOX && label && (
             <FormLabel>{label}</FormLabel>
           )}
