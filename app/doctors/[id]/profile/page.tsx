@@ -99,8 +99,8 @@ type AppointmentWithPatient = Models.Document & {
             className="mx-auto rounded-full shadow-md"
           />
           <h1 className="header">Добредојде, {doctor.name}</h1>
-          <p className="text-dark-700">{doctor.email}</p>
-          <p className="text-dark-700">{doctor.phone}</p>
+          <p className="text-gray-700">{doctor.email}</p>
+          <p className="text-gray-700">{doctor.phone}</p>
         </section>
 
         {/* Patients with Appointments */}

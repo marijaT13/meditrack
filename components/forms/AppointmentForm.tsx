@@ -149,7 +149,7 @@ const schedule = form.watch("schedule");
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 flex-1">
        {type === 'create' && <section className="mb-12 space-y-4">
         <h1 className="header">Креирај нов термин</h1>
-        <p className="text-dark-700">Поднеси барање за нов термин.</p>
+        <p className="text-gray-700">Поднеси барање за нов термин.</p>
        </section>}
 
         {type !=="cancel" &&(

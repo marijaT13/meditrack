@@ -75,14 +75,9 @@ export const UserOtpModal = ({userId, redirectTo = `/patients/${userId}/new-appo
         <AlertDialogHeader>
           <AlertDialogTitle className="flex items-start justify-between">
             Кориснички пристап
-            <Image
-              src="/assets/icons/close.svg"
-              alt="close"
-              width={20}
-              height={20}
-              onClick={closeModal}
-              className="cursor-pointer"
-            />
+            <svg xmlns="http://www.w3.org/2000/svg"  onClick={closeModal} fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6 cursor-pointer">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
           </AlertDialogTitle>
           <AlertDialogDescription>
             За влез во корисничкиот профил, внесете го вашиот код.

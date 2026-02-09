@@ -170,8 +170,8 @@ const onSubmit = async (values: ProfileFormValues) => {
             className="mx-auto rounded-full shadow-md"
           />
           <h1 className="header">Здраво, {patient.name}</h1>
-          <p className="text-dark-700">{patient.email}</p>
-          <p className="text-dark-700">{patient.phone}</p>
+          <p className="text-gray-700">{patient.email}</p>
+          <p className="text-gray-700">{patient.phone}</p>
         </section>
   
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full max-w-7xl">

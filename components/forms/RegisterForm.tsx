@@ -63,7 +63,7 @@ const RegisterForm = ({ user }: { user: any }) => {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 flex-1">
        <section className="mb-12 space-y-4">
         <h1 className="header">Здраво ✨</h1>
-        <p className="text-dark-700">Внеси ги своите податоци и закажи го твојот прв термин.</p>
+        <p className="text-gray-500">Внеси ги своите податоци и закажи го твојот прв термин.</p>
 
         {/* NAME */}
           <CustomFormField

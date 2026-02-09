@@ -28,7 +28,7 @@ export default function DoctorsPage() {
             alt="MediTrack logo"
             className="mb-4 "
           />
-          <p className="text-dark-700">
+          <p className="text-gray-700">
            Најавете се тука.
           </p>
 

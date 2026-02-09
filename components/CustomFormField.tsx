@@ -66,7 +66,7 @@ const RenderField = <T extends FieldValues>({
   switch (fieldType) {
     case FormFieldType.INPUT:
       return (
-        <div className="flex rounded-md border text-white border-dark-500 bg-white">
+        <div className="flex rounded-md border border-dark-500 bg-white">
           {iconSrc && (
             <Image
               src={iconSrc}
@@ -80,7 +80,7 @@ const RenderField = <T extends FieldValues>({
             <Input
               placeholder={placeholder}
               {...field}
-              className="shad-input border-0 text-white"
+              className="shad-input border-0 text-black"
             />
           </FormControl>
         </div>
@@ -89,7 +89,7 @@ const RenderField = <T extends FieldValues>({
     case FormFieldType.TEXTAREA:
       return (
         <FormControl>
-          <Textarea {...field} placeholder={placeholder} className="shad-textarea bg-white text-white" />
+          <Textarea {...field} placeholder={placeholder} className="shad-textarea bg-white text-black" />
         </FormControl>
       );
 
@@ -103,7 +103,7 @@ const RenderField = <T extends FieldValues>({
             value={field.value}
             onChange={field.onChange}
             placeholder={placeholder}
-            className="input-phone text-white bg-white"
+            className="input-phone text-black bg-white"
           />
         </FormControl>
       );

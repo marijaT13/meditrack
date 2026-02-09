@@ -31,7 +31,7 @@ const AdminPage = async () => {
       <main className="admin-main">
         <section className="w-full space-y-4">
           <h1 className="header">Добредојде</h1>
-          <p className="text-dark-700">
+          <p className="text-gray-700">
             Започни со прегледување на најновите закажани термини и управување со системот.
           </p>
         </section>
