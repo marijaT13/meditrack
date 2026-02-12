@@ -133,7 +133,9 @@ const RenderField = <T extends FieldValues>({
           </FormControl>
         </div>
       );
-
+        case FormFieldType.SKELETON:
+    return renderSkeleton ? renderSkeleton(field) : null;
+        
     case FormFieldType.SELECT:
       return (
         <FormControl>

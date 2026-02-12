@@ -35,7 +35,7 @@ export default function DoctorsPage() {
           <DoctorsForm />
 
           <p className="text-center text-sm text-gray-500 mt-4">
-            ©2025 МediTrack
+            ©{new Date().getFullYear()} МediTrack
           </p>
         </div>
       </section>

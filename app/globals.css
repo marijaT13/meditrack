@@ -96,7 +96,7 @@
 
   /* ==== FORM */
   .radio-group {
-    @apply flex h-full flex-1 items-center gap-2 rounded-md border border-dashed border-dark-500 bg-dark-400 p-3;
+    @apply flex h-full flex-1 items-center gap-2 rounded-md border border-white shadow-2xl bg-transparent p-3;
   }
 
   .checkbox-label {
@@ -105,11 +105,11 @@
 
   /* ==== File Upload */
   .file-upload {
-    @apply text-12-regular flex cursor-pointer  flex-col items-center justify-center gap-3 rounded-md border border-dashed border-dark-500 bg-dark-400 p-5;
+    @apply text-12-regular flex cursor-pointer  flex-col items-center justify-center gap-3 rounded-md border shadow-2xl border-black  bg-transparent p-5;
   }
 
   .file-upload_label {
-    @apply flex flex-col justify-center gap-2 text-center text-gray-600;
+    @apply flex flex-col justify-center gap-2 text-center text-black;
   }
 
   /* ==== Stat Card */
@@ -256,7 +256,7 @@
   }
 
   .shad-otp-slot {
-    @apply text-36-bold justify-center flex border text-black border-dark-500 rounded-lg size-16 gap-4 !important;
+    @apply text-36-bold justify-center flex border text-blue-200 border-dark-500 rounded-lg size-16 gap-4 !important;
   }
 
   .shad-alert-dialog {

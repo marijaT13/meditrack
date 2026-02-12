@@ -101,31 +101,33 @@ const RegisterForm = ({ user }: { user: any }) => {
           <div className="flex flex-col gap-6 xl:flex-row">
             <CustomFormField
               fieldType={FormFieldType.DATE_PICKER}
-              form={form}              name="birthDate"
+              form={form}              
+              name="birthDate"
               label="Датум на раѓање"
             />
 
             <CustomFormField
               fieldType={FormFieldType.SKELETON}
-              form={form}              name="gender"
+              form={form}              
+              name="gender"
               label="Пол"
               renderSkeleton={(field) => (
                 <FormControl>
                   <RadioGroup
                     className="flex h-11 gap-2 xl:justify-between"
                     onValueChange={field.onChange}
-                    defaultValue={field.value ? String(field.value) : undefined}
+                    value={field.value ? String(field.value) : ""}
                   >
                     {GenderOptions.map((option, i) => (
                       <div key={option + i} className="radio-group items-center">
-                        <RadioGroupItem value={option} id={option} className="h-5 w-5 ml-2 border-hidden
-                          data-[state=checked]:text-red-500
-                        data-[state=checked]:bg-red-500
-                        data-[state=unchecked]:bg-red-200"/>
+                        <RadioGroupItem value={option} id={option} className="h-5 w-5 ml-2 border-hidden cursor-pointer
+                          data-[state=checked]:text-gray-600
+                        data-[state=checked]:bg-gray-600
+                        data-[state=unchecked]:bg-gray-400"/>
                         <Label htmlFor={option}   
                         className="cursor-pointer px-4 py-2 transition-colors 
-                        text-red-200 hover:text-red-300 
-                        peer-checked:bg-red-500 peer-checked:text-red-300">
+                        text-gray-500 hover:text-gray-700 peer-data-[state=checked]:text-gray-700 peer-data-[state=checked]:bg-gray-700
+                       ">
                           {option}
                         </Label>
                       </div>
@@ -140,14 +142,16 @@ const RegisterForm = ({ user }: { user: any }) => {
           <div className="flex flex-col gap-6 xl:flex-row">
             <CustomFormField
               fieldType={FormFieldType.INPUT}
-              form={form}              name="address"
+              form={form}              
+              name="address"
               label="Адреса на живеење"
               placeholder="ул. Партизанска бб, Битола"
             />
 
             <CustomFormField
               fieldType={FormFieldType.INPUT}
-              form={form}              name="occupation"
+              form={form}              
+              name="occupation"
               label="Професија"
               placeholder="Програмер"
             />
@@ -157,14 +161,16 @@ const RegisterForm = ({ user }: { user: any }) => {
           <div className="flex flex-col gap-6 xl:flex-row">
             <CustomFormField
               fieldType={FormFieldType.INPUT}
-              form={form}              name="emergencyContactName"
+              form={form}              
+              name="emergencyContactName"
               label="Име на контакт за итни случаеви"
               placeholder="Име на родител или старател"
             />
 
             <CustomFormField
               fieldType={FormFieldType.PHONE_INPUT}
-              form={form}              name="emergencyContactNumber"
+              form={form}              
+              name="emergencyContactNumber"
               label="Број на контакт за итни случаеви"
               placeholder="(+389) 70 456 356"
             />
@@ -179,7 +185,8 @@ const RegisterForm = ({ user }: { user: any }) => {
           {/* PRIMARY CARE PHYSICIAN */}
           <CustomFormField
             fieldType={FormFieldType.SELECT}
-            form={form}            name="primaryPhysician"
+            form={form}            
+            name="primaryPhysician"
             label="Матичен лекар"
             placeholder="Одбери лекар"
           >
@@ -203,14 +210,16 @@ const RegisterForm = ({ user }: { user: any }) => {
           <div className="flex flex-col gap-6 xl:flex-row">
             <CustomFormField
               fieldType={FormFieldType.INPUT}
-              form={form}              name="insuranceProvider"
+              form={form}              
+              name="insuranceProvider"
               label="Осигурување"
               placeholder="Кроација осигурување"
             />
 
             <CustomFormField
               fieldType={FormFieldType.INPUT}
-              form={form}              name="insurancePolicyNumber"
+              form={form}              
+              name="insurancePolicyNumber"
               label="Број на полиса"
               placeholder="ABC123456789"
             />
@@ -220,14 +229,16 @@ const RegisterForm = ({ user }: { user: any }) => {
           <div className="flex flex-col gap-6 xl:flex-row">
             <CustomFormField
               fieldType={FormFieldType.TEXTAREA}
-              form={form}              name="allergies"
-              label="Алергени(ако има)"
+              form={form}              
+              name="allergies"
+              label="Алергени (ако има)"
               placeholder="Кикиритки, Пеницилин, Прашина, Полен итн."
             />
 
             <CustomFormField
               fieldType={FormFieldType.TEXTAREA}
-              form={form}              name="currentMedication"
+              form={form}              
+              name="currentMedication"
               label="Тековни лекови (ако има)"
               placeholder="Ibuprofen 200mg, Levothyroxine 50mcg"
             />
@@ -237,14 +248,16 @@ const RegisterForm = ({ user }: { user: any }) => {
           <div className="flex flex-col gap-6 xl:flex-row">
             <CustomFormField
               fieldType={FormFieldType.TEXTAREA}
-              form={form}              name="familyMedicalHistory"
-              label="Медицинска историја на фамилијата(ако е релевантна)"
+              form={form}              
+              name="familyMedicalHistory"
+              label="Медицинска историја на фамилијата (ако е релевантна)"
               placeholder="Дијабетес, Хипертензија, Рак итн."
             />
 
             <CustomFormField
               fieldType={FormFieldType.TEXTAREA}
-              form={form}              name="pastMedicalHistory"
+              form={form}              
+              name="pastMedicalHistory"
               label="Претходни медицински состојби и интервенции"
               placeholder="Апендектомија, Астма, Хипертензија итн."
             />
@@ -257,13 +270,15 @@ const RegisterForm = ({ user }: { user: any }) => {
           </div>
           <CustomFormField
             fieldType={FormFieldType.INPUT}
-            form={form}            name="identificationNumber"
+            form={form}            
+            name="identificationNumber"
             label="Матичен број"
             placeholder="0202002415000"
           />
           <CustomFormField
             fieldType={FormFieldType.SELECT}
-            form={form}            name="identificationType"
+            form={form}            
+            name="identificationType"
             label="Вид на иденфитикација"
             placeholder="Селектирај тип на идентификација"
           >
@@ -276,7 +291,8 @@ const RegisterForm = ({ user }: { user: any }) => {
 
           <CustomFormField
             fieldType={FormFieldType.SKELETON}
-            form={form}            name="identificationDocument"
+            form={form}            
+            name="identificationDocument"
             label="Скениран документ за идентификација"
             renderSkeleton={(field) => (
               <FormControl>
@@ -295,19 +311,22 @@ const RegisterForm = ({ user }: { user: any }) => {
 
           <CustomFormField
             fieldType={FormFieldType.CHECKBOX}
-            form={form}            name="treatmentConsent"
+            form={form}            
+            name="treatmentConsent"
             label="Се согласувам да примам лекување за мојата здравствена состојба."
           />
 
           <CustomFormField
             fieldType={FormFieldType.CHECKBOX}
-            form={form}            name="disclosureConsent"
+            form={form}            
+            name="disclosureConsent"
             label="Се согласувам моите здравствени информации да се користат за понатамошни лекувања."
           />
 
           <CustomFormField
             fieldType={FormFieldType.CHECKBOX}
-            form={form}            name="privacyConsent"
+            form={form}            
+            name="privacyConsent"
             label="Јас ги прегледав и се согласувам со правилата за приватност."
           />
         </section>

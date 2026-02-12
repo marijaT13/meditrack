@@ -54,7 +54,7 @@ export default async function RegisterPage({ params }: PageProps) {
           <RegisterForm user={user} />
 
           <p className="text-center text-sm text-gray-500 py-5">
-            ©2025 МediTrack
+            ©{new Date().getFullYear()} МediTrack
           </p>
         </div>
       </section>

@@ -27,7 +27,7 @@ export default async function Appointment({ params }: SearchParamProps<"userId">
           />
           <div className="flex justify-between items-center mt-4 text-sm text-gray-500">
           <p className="copyright">
-            ©2025 МediTrack
+            ©{new Date().getFullYear()} МediTrack
           </p>
           <Link href={`/patients/${userId}/profile`} className="text-green-600 hover:underline font-semibold">Профил</Link>
         </div>

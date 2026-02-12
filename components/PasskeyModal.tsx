@@ -79,7 +79,7 @@ export const PasskeyModal = ({ redirectTo = "/doctors", onClose }: PasskeyModalP
                   className={`
                     shad-otp-slot
                     ${isFilled ? "bg-blue-700 border-blue-300" : ""}
-                    ${isActive ? "border-red-500 animate-pulse" : ""}
+                    ${isActive ? "border-blue-500 animate-pulse" : ""}
                   `}
                       />
                     );

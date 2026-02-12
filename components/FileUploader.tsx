@@ -35,8 +35,8 @@ const FileUploader = ({ files, onChange }: FileUploaderProps) => {
             alt="upload"
           />
           <div className="file-upload_label">
-            <p className="text-14-regular ">
-              <span className="text-green-600">Click to upload </span>
+            <p className="text-14-regular">
+              <span className="text-green-500">Click to upload </span>
               or drag and drop
             </p>
             <p className="text-12-regular">
