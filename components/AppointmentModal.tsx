@@ -11,24 +11,40 @@ import {
 import { Button } from './ui/button';
 import AppointmentForm from './forms/AppointmentForm';
 import { Appointment } from '@/types/appwrite.types';
+interface AppointmentModalProps {
+  type: 'schedule' | 'cancel'
+  patientId: string
+  userId: string
+  appointment?: Appointment
+  trigger?: React.ReactNode
+}
 
-const AppointmentModal = ({type, patientId, userId, appointment}: {
-    type: 'schedule' |  'cancel',
-    patientId: string,
-    userId: string,
-    appointment?: Appointment,
-}) => {
-    const [open, setOpen] = useState(false);
+const AppointmentModal = ({
+  type,
+  patientId,
+  userId,
+  appointment,
+  trigger,
+}: AppointmentModalProps) => {
+  const [open, setOpen] = useState(false)
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
 
     <DialogTrigger asChild>
-        <Button variant="ghost" 
-         className={`capitalize ${type === "schedule" && "text-green-300"}`}>
-        {type}
-        </Button>
-    </DialogTrigger>
+        {trigger ? (
+          trigger
+        ) : (
+          <Button
+            variant="ghost"
+            className={`capitalize ${
+              type === "schedule" && "text-blue-600"
+            }`}
+          >
+            {type}
+          </Button>
+        )}
+      </DialogTrigger>
     
     <DialogContent className='shad-dialog sm:max-w-md'>
         <DialogHeader className='mb-4 space-y-3'>

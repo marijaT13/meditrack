@@ -32,12 +32,45 @@ export const columns: ColumnDef<Appointment>[] = [
     cell:({row})=> <p className="text-14-medium">{row.original.patient.name}</p>
   },
   {
-    accessorKey: "status",
-    header: "Статус",
-    cell:({row}) => (<div className="min-w-[115px]">
-       <StatusBadge status={row.original.status} />
-    </div>)
+  accessorKey: "status",
+  header: "Статус",
+  cell: ({ row: { original: data } }) => {
+    const status = data.status
+
+    return (
+      <div className="min-w-[115px]">
+        {status === "pending" && (
+          <AppointmentModal
+            type="schedule"
+            patientId={data.patient.$id}
+            userId={data.userId}
+            appointment={data}
+            trigger={
+              <StatusBadge status={status} />
+            }
+          />
+        )}
+
+        {status === "scheduled" && (
+          <AppointmentModal
+            type="cancel"
+            patientId={data.patient.$id}
+            userId={data.userId}
+            appointment={data}
+            trigger={
+              <StatusBadge status={status} />
+            }
+          />
+        )}
+
+        {status === "cancelled" && (
+          <StatusBadge status={status} />
+        )}
+      </div>
+    )
   },
+}
+,
   {
     accessorKey: "schedule",
     header: "Термин",
@@ -67,27 +100,5 @@ export const columns: ColumnDef<Appointment>[] = [
       )
     },
   },
-   {
-    id: "actions",
-    header: () => <div className="pl-4">Делувања </div>,
-    cell: ({ row: {original: data} }) => {
-      return (
-        <div className="flex gap-1">
-          <AppointmentModal 
-            type='schedule'
-            patientId={data.patient.$id}
-            userId={data.userId}
-            appointment={data}
-            />
-          <AppointmentModal 
-            type='cancel'
-            patientId={data.patient.$id}
-            userId={data.userId}
-            appointment={data}
-           />
-
-        </div>
-      )
-    },
-  },
+   
 ]

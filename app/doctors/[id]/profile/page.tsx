@@ -105,25 +105,25 @@ type AppointmentWithPatient = Models.Document & {
 
         {/* Patients with Appointments */}
         <section className="grid place-items-center">
-          <Card className="w-full max-w-4xl shadow-md rounded-2xl ">
+          <Card className="w-full max-w-4xl shadow-2xl border rounded-2xl">
             <CardHeader>
-              <CardTitle className="text-lg font-semibold">
+              <CardTitle className="text-xl font-semibold">
                 Пациенти со закажани термини ({appointments.total})
               </CardTitle>
             </CardHeader>
             <CardContent className="flex justify-center">
               {appointments.total === 0 ? (
-                <p className="text-gray-500">Нема пациенти закажано.</p>
+                <p className="text-gray-600">Нема пациенти закажано.</p>
               ) : (
                 <Accordion type="single" collapsible>
                   {appointmentsWithPatients.map((appt: any) => (
-                    <AccordionItem key={appt.$id} value={appt.$id} className="border-b">
+                    <AccordionItem key={appt.$id} value={appt.$id} className="border-b border-black/50">
                       <AccordionTrigger>
-                        {appt.patient?.name || "Пациент без име"} —{" "}
+                        {appt.patient?.name || "Пациент без име"} — {" "}
                          {new Date(appt.schedule).toLocaleDateString()}
 
                       </AccordionTrigger>
-                      <AccordionContent className="space-y-2 text-sm text-gray-400">
+                      <AccordionContent className="space-y-2 text-sm text-gray-800">
                         <p><strong>Име:</strong> {appt.patient?.name || "—"}</p>
                         <p><strong>Е-пошта:</strong> {appt.patient?.email || "—"}</p>
                         <p><strong>Телефон:</strong> {appt.patient?.phone || "—"}</p>

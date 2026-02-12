@@ -123,9 +123,19 @@
   }
 
   /* Data Table */
-  .data-table {
-    @apply z-10 w-full overflow-hidden rounded-lg border border-dark-400 shadow-lg;
-  }
+.data-table {
+  @apply 
+    z-10 
+    w-full 
+    max-w-6xl 
+    mx-auto 
+    overflow-x-auto 
+    rounded-xl 
+    border 
+    border-dark-400 
+    shadow-lg;
+}
+
 
   .table-actions {
     @apply flex w-full items-center justify-between space-x-2 p-4;
@@ -191,12 +201,12 @@
   }
 
   .shad-gray-btn {
-    @apply border border-dark-500 cursor-pointer bg-dark-300 !important;
+    @apply border border-dark-500 cursor-pointer bg-transparent shadow-sm !important;
     
   }
 
   .shad-input-label {
-    @apply text-14-medium text-gray-700 !important;
+    @apply text-14-medium text-gray-600 !important;
   }
 
   .shad-input {
@@ -236,7 +246,7 @@
   }
 
   .shad-error {
-    @apply text-red-400 !important;
+    @apply text-red-500 !important;
   }
 
   .shad-table {
@@ -244,11 +254,11 @@
   }
 
   .shad-table-row-header {
-    @apply border-b border-dark-400 text-light-200 hover:bg-transparent !important;
+    @apply border-b border-dark-400 text-gray-200 hover:bg-transparent !important;
   }
 
   .shad-table-row {
-    @apply border-b border-dark-400 text-light-200 !important;
+    @apply border-b border-dark-400 text-dark-200 !important;
   }
 
   .shad-otp {

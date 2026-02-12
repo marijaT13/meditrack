@@ -24,9 +24,20 @@ const StatCard = ({count = 0, label, icon, type }: StatCardProps) =>{
                     alt={label}
                     className='size-8 w-fit'
                 />
-                <h2 className='text-32-bold text-white'>{count}</h2>
+                <h2 className={clsx('text-32-bold',{
+                    'text-yellow-400':type ==='appointments',
+                    'text-blue-300':type === 'pending',
+                    'text-red-400':type === 'cancelled',
+                })}
+                
+                >{count}</h2>
             </div>
-            <p className='text-14-regular'>{label}</p>
+            <p  className={clsx('text-14-regular', {
+                'text-yellow-600': type === 'appointments',
+                'text-blue-600': type === 'pending',
+                'text-red-600': type === 'cancelled',
+                })}
+            >{label}</p>
         </div>
     )
 }

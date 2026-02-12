@@ -45,15 +45,15 @@ export function DataTable<TData, TValue>({
   })
 
   return (
-    <div>
-    <div className="data-table">
+<div className="w-full overflow-x-auto">
+    <div className="data-table hidden sm:block">
       <Table className="shad-table">
-        <TableHeader className="bg-dark-200">
+        <TableHeader className="bg-red-600">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id} className="shad-table-row-header">
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead key={header.id}>
+                  <TableHead key={header.id} className="text-center">
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -66,7 +66,7 @@ export function DataTable<TData, TValue>({
             </TableRow>
           ))}
         </TableHeader>
-        <TableBody>
+        <TableBody className=" border-separate border-spacing-y-3 border-spacing-x-2">
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow
@@ -75,7 +75,7 @@ export function DataTable<TData, TValue>({
                 className="shad-table-row"
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
+                  <TableCell key={cell.id} className="text-center py-4 px-3">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
@@ -90,7 +90,32 @@ export function DataTable<TData, TValue>({
           )}
         </TableBody>
       </Table>
-    
+    <div className="md:hidden space-y-4">
+  {table.getRowModel().rows.map((row) => (
+    <div
+      key={row.id}
+      className="rounded-xl border p-4 shadow-sm bg-white"
+    >
+      {row.getVisibleCells().map((cell) => (
+        <div
+          key={cell.id}
+          className="flex justify-between py-2 border-b last:border-none"
+        >
+          <span className="font-medium text-gray-500">
+            {cell.column.columnDef.header as string}
+          </span>
+
+          <span className="text-right">
+            {flexRender(
+              cell.column.columnDef.cell,
+              cell.getContext()
+            )}
+          </span>
+        </div>
+      ))}
+    </div>
+  ))}
+</div>
     <div className="table-actions">
         <Button
           variant="outline"

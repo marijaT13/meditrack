@@ -24,14 +24,13 @@ const AdminPage = async () => {
           />
         </Link>
 
-        {/* Doctor Profile Button */}
         <ProfileButton />
       </header>
 
       <main className="admin-main">
         <section className="w-full space-y-4">
-          <h1 className="header">Добредојде</h1>
-          <p className="text-gray-700">
+          <h1 className="header text-white">Добредојде</h1>
+          <p className='text-black text-xl'>
             Започни со прегледување на најновите закажани термини и управување со системот.
           </p>
         </section>
