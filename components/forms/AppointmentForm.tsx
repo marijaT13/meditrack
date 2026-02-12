@@ -148,7 +148,7 @@ const schedule = form.watch("schedule");
        <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 flex-1">
        {type === 'create' && <section className="mb-12 space-y-4">
-        <h1 className="header">Креирај нов термин</h1>
+        <h1 className="header">Закажи термин</h1>
         <p className="text-gray-700">Поднеси барање за нов термин.</p>
        </section>}
 
@@ -159,7 +159,7 @@ const schedule = form.watch("schedule");
             form={form}
             name="primaryPhysician"
             label="Доктор"
-            placeholder="Select a doctor"
+            placeholder="Селектирај доктор"
           >
             {Doctors.map((doctor, i) => (
               <SelectItem key={doctor.name + i} value={doctor.name}>

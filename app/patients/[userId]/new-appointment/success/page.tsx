@@ -1,11 +1,13 @@
+
 import { Button } from '@/components/ui/button';
 import { Doctors } from '@/constants';
 import { getAppointment } from '@/lib/actions/appointment.actions';
 import { formatDateTime } from '@/lib/utils';
 import { SearchParamProps } from '@/types';
+import Lottie from 'lottie-react';
 import Image from 'next/image';
 import Link from 'next/link';
-
+import Animation from '@/components/Animation';
 const Success = async ({
   searchParams,
   params,
@@ -34,12 +36,8 @@ const Success = async ({
         </Link>
 
         <section className="flex flex-col items-center">
-          <Image
-            src="/assets/gifs/success.gif"
-            height={300}
-            width={280}
-            alt="success"
-          />
+          {/*  */}
+          <Animation/>
 
           <h2 className="header mb-6 max-w-[600px] text-center">
             Твоето <span className="text-green-500">барање за термин</span> е успешно испратено!
@@ -81,8 +79,8 @@ const Success = async ({
             </Link>
           </Button>
 
-          <Button variant="outline" className="bg-red-500" asChild>
-            <Link href={`/patients/${userId}/profile`}>
+          <Button variant="default" className="bg-red-500" asChild>
+            <Link href={`/patients/${userId}/profile`} className='text-white'>
               Кон твојот профил
             </Link>
           </Button>

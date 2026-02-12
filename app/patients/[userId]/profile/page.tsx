@@ -73,7 +73,7 @@ export default function ProfilePage({ params }: { params: Promise<{ userId: stri
 
   // Save patient
 const onSubmit = async (values: ProfileFormValues) => {
-  console.log("📝 Submitting values:", values);
+  console.log("Submitting values:", values);
 
   try {
     setIsSaving(true);
@@ -86,7 +86,7 @@ const onSubmit = async (values: ProfileFormValues) => {
         : patient.birthDate,
     };
 
-    console.log("➡️ Final payload to Appwrite:", updatedPayload);
+    console.log("Final payload to Appwrite:", updatedPayload);
 
     const updated = await updatePatient(patient.$id, updatedPayload);
 
@@ -178,7 +178,7 @@ const onSubmit = async (values: ProfileFormValues) => {
     {/* Profile card */}
     <Card className="shadow-md rounded-2xl">
       <CardHeader>
-        <CardTitle className="text-lg font-semibold">Профил</CardTitle>
+        <CardTitle className="text-xl font-semibold">Профил</CardTitle>
       </CardHeader>
       <CardContent>
         {!isEditing ? (
@@ -262,9 +262,9 @@ const onSubmit = async (values: ProfileFormValues) => {
     </Card>
       <div className="space-y-6">
       {/* Upcoming */}
-      <Card className="shadow-md rounded-2xl">
+      <Card className="shadow-2xl border rounded-2xl">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold text-green-600">
+          <CardTitle className="text-xl font-bold text-green-600">
             Вашите термини
           </CardTitle>
         </CardHeader>
@@ -272,7 +272,7 @@ const onSubmit = async (values: ProfileFormValues) => {
           <Accordion type="single" collapsible className="w-full space-y-4">
           {/* Upcoming */}
       <AccordionItem value="upcoming">
-        <AccordionTrigger className="text-green-600 font-semibold">
+        <AccordionTrigger className="text-green-600 font-semibold text-lg">
           Закажани термини
         </AccordionTrigger>
         <AccordionContent>
@@ -281,12 +281,12 @@ const onSubmit = async (values: ProfileFormValues) => {
               {upcomingAppointments.map((appt) => (
                 <li
                   key={appt.$id}
-                  className="p-3 border rounded-lg shadow-sm bg-green-600"
+                  className="p-3 border rounded-lg shadow-sm bg-green-600/80"
                 >
-                  <p className="font-medium">
+                  <p className="font-medium text-gray-200">
                     {new Date(appt.schedule).toLocaleString()}
                   </p>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-gray-300">
                     Со Др. {appt.primaryPhysician}
                   </p>
                 </li>
@@ -299,7 +299,7 @@ const onSubmit = async (values: ProfileFormValues) => {
       </AccordionItem>
       {/* Pending */}
       <AccordionItem value="pending">
-        <AccordionTrigger className="text-yellow-600 font-semibold">
+        <AccordionTrigger className="text-yellow-600 font-semibold text-lg">
           Термини во исчекување
         </AccordionTrigger>
         <AccordionContent>
@@ -308,12 +308,12 @@ const onSubmit = async (values: ProfileFormValues) => {
               {pendingAppointments.map((appt) => (
                 <li
                   key={appt.$id}
-                  className="p-3 border rounded-lg shadow-sm bg-yellow-600"
+                  className="p-3 border rounded-lg shadow-sm bg-yellow-600/80"
                 >
-                  <p className="font-medium">
+                  <p className="font-medium text-gray-200">
                    Барање за {new Date(appt.schedule).toLocaleString()}
                   </p>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-gray-300">
                     Со Др. {appt.primaryPhysician}
                   </p>
                 </li>
@@ -326,7 +326,7 @@ const onSubmit = async (values: ProfileFormValues) => {
       </AccordionItem>
         {/* Cancelled */}
       <AccordionItem value="cancelled">
-        <AccordionTrigger className="text-red-500 font-semibold">
+        <AccordionTrigger className="text-red-500 font-semibold text-lg">
           Откажани термини
         </AccordionTrigger>
         <AccordionContent>
@@ -335,16 +335,16 @@ const onSubmit = async (values: ProfileFormValues) => {
               {cancelledAppointments.map((appt) => (
                 <li
                   key={appt.$id}
-                  className="p-3 border rounded-lg shadow-sm bg-red-600"
+                  className="p-3 border rounded-lg shadow-sm bg-red-600/80"
                 >
-                  <p className="font-medium">
+                  <p className="font-medium text-gray-200">
                     {new Date(appt.schedule).toLocaleString()}
                   </p>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-gray-300">
                     Со Др. {appt.primaryPhysician}
                   </p>
                   {appt.cancellationReason && (
-                    <p className="text-xs text-red-700 mt-1">
+                    <p className="text-xs text-red-400 mt-1">
                       Причина: {appt.cancellationReason}
                     </p>
                   )}
