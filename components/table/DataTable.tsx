@@ -46,8 +46,9 @@ export function DataTable<TData, TValue>({
 
   return (
 <div className="w-full overflow-x-auto">
-    <div className="data-table hidden sm:block">
-      <Table className="shad-table">
+    <div className="data-table">
+      {/* Desktop table - hidden on mobile */}
+      <Table className="shad-table hidden md:table">
         <TableHeader className="bg-red-600">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id} className="shad-table-row-header">
@@ -90,32 +91,41 @@ export function DataTable<TData, TValue>({
           )}
         </TableBody>
       </Table>
-    <div className="md:hidden space-y-4">
-  {table.getRowModel().rows.map((row) => (
-    <div
-      key={row.id}
-      className="rounded-xl border p-4 shadow-sm bg-white"
-    >
-      {row.getVisibleCells().map((cell) => (
-        <div
-          key={cell.id}
-          className="flex justify-between py-2 border-b last:border-none"
-        >
-          <span className="font-medium text-gray-500">
-            {cell.column.columnDef.header as string}
-          </span>
-
-          <span className="text-right">
+    {/* Mobile table - visible on mobile, hidden on desktop */}
+       <div className="block md:hidden space-y-4 border-none">
+  {table.getRowModel().rows.length ? (
+    table.getRowModel().rows.map((row) => (
+      <div
+        key={row.id}
+        className="rounded-xl p-4 shadow-2xl"
+      >
+        {row.getVisibleCells().map((cell) => (
+          <div
+            key={cell.id}
+            className="flex justify-between py-2 border-b last:border-none"
+          >
+            <span className="font-medium">
             {flexRender(
-              cell.column.columnDef.cell,
-              cell.getContext()
+            cell.column.columnDef.header as string,
+            cell.getContext()
             )}
-          </span>
-        </div>
-      ))}
-    </div>
-  ))}
+            </span>
+
+            <span className="text-right">
+              {flexRender(
+                cell.column.columnDef.cell,
+                cell.getContext()
+              )}
+            </span>
+          </div>
+        ))}
+      </div>
+    ))
+  ) : (
+    <p className="text-center py-6">Нема резултати.</p>
+  )}
 </div>
+
     <div className="table-actions">
         <Button
           variant="outline"
